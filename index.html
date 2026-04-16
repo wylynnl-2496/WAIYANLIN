@@ -4,752 +4,622 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wai Yan Lin — International Development & Education Policy</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
-    --ink:        #0d1117;
-    --deep:       #0f1e2e;
-    --navy:       #162840;
-    --mid:        #1e3a55;
-    --gold:       #c8a96e;
-    --gold-light: #e2c98f;
-    --muted:      #8ba3bc;
-    --text:       #d4e0ec;
-    --soft:       #9ab0c6;
-    --white:      #f0f6fc;
-    --accent:     #3b82f6;
-    --tag-bg:     rgba(200,169,110,0.10);
+    --bg:       #111111;
+    --surface:  #1a1a1a;
+    --surface2: #222222;
+    --border:   rgba(255,255,255,0.08);
+    --border2:  rgba(255,255,255,0.14);
+    --red:      #c0392b;
+    --red-soft: #e05c4e;
+    --red-pale: rgba(192,57,43,0.12);
+    --white:    #f5f5f5;
+    --text:     #cccccc;
+    --muted:    #888888;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--ink);
+    background: var(--bg);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 300;
     line-height: 1.7;
     overflow-x: hidden;
   }
 
-  /* ─── NOISE OVERLAY ─── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.4;
+  .top-rule {
+    height: 3px;
+    background: linear-gradient(90deg, var(--red) 0%, var(--red-soft) 40%, transparent 100%);
   }
 
-  /* ─── HERO ─── */
   .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 6rem 2rem 4rem;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 70% 60% at 80% 50%, rgba(30,58,85,0.7) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 10% 80%, rgba(59,130,246,0.08) 0%, transparent 50%),
-      linear-gradient(160deg, #0d1117 0%, #0f1e2e 60%, #0d1117 100%);
-  }
-
-  .hero-line {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-
-  .hero-content {
-    position: relative; z-index: 1;
-    max-width: 900px;
+    padding: 5rem 2rem 4rem;
+    max-width: 1000px;
     margin: 0 auto;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: center;
   }
 
-  .eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
+  @media (max-width: 700px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-badge-col { display: none; }
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.2s forwards;
+    color: var(--red-soft);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .label::before {
+    content: '';
+    width: 20px; height: 2px;
+    background: var(--red);
   }
 
   h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3.2rem, 8vw, 6.5rem);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: var(--white);
-    margin-bottom: 0.3rem;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.35s forwards;
-  }
-
-  h1 em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-
-  .hero-subtitle {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-weight: 300;
-    font-style: italic;
-    color: var(--soft);
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.5s forwards;
-  }
-
-  .hero-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 3rem;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.65s forwards;
-  }
-
-  .tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    color: var(--gold);
-    border: 1px solid rgba(200,169,110,0.3);
-    background: var(--tag-bg);
-    padding: 0.35rem 0.9rem;
-    border-radius: 2px;
-  }
-
-  .hero-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.8s forwards;
-  }
-
-  .badge {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  .badge-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-    flex-shrink: 0;
-  }
-
-  /* ─── SCROLL INDICATOR ─── */
-  .scroll-indicator {
-    position: absolute;
-    bottom: 2.5rem; left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    opacity: 0;
-    animation: fadeIn 1s ease 1.5s forwards;
-  }
-
-  .scroll-indicator span {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
-
-  /* ─── SECTIONS ─── */
-  section {
-    position: relative; z-index: 1;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 5rem 2rem;
-  }
-
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, rgba(200,169,110,0.3), transparent);
-  }
-
-  h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 300;
-    color: var(--white);
-    margin-bottom: 2.5rem;
-    line-height: 1.2;
-  }
-
-  /* ─── ABOUT ─── */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-  }
-
-  @media (max-width: 640px) {
-    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-  }
-
-  .about-text {
-    font-size: 1rem;
-    color: var(--soft);
-    line-height: 1.85;
-  }
-
-  .about-text p + p { margin-top: 1rem; }
-
-  .stat-block {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .stat {
-    border-left: 2px solid rgba(200,169,110,0.4);
-    padding-left: 1.2rem;
-  }
-
-  .stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.4rem;
-    font-weight: 300;
-    color: var(--gold-light);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin-top: 0.2rem;
-  }
-
-  /* ─── TIMELINE ─── */
-  .timeline {
-    position: relative;
-    padding-left: 2rem;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0.5rem; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-  }
-
-  .timeline-item {
-    position: relative;
-    margin-bottom: 3rem;
-  }
-
-  .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -2.37rem;
-    top: 0.45rem;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 10px rgba(200,169,110,0.5);
-  }
-
-  .tl-meta {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.3rem;
-  }
-
-  .tl-date {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--gold);
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-
-  .tl-org {
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  .tl-role {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
     font-weight: 400;
+    line-height: 1.05;
     color: var(--white);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
   }
 
-  .tl-desc {
-    font-size: 0.88rem;
-    color: var(--soft);
-    line-height: 1.75;
+  h1 em { font-style: italic; color: var(--red-soft); }
+
+  .hero-title {
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
   }
 
-  .tl-highlights {
-    margin-top: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
-  .tl-highlight {
-    font-size: 0.82rem;
-    color: var(--soft);
-    padding-left: 1rem;
-    position: relative;
-  }
-
-  .tl-highlight::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--gold);
-    font-size: 0.75rem;
-  }
-
-  /* ─── SKILLS ─── */
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .skill-card {
-    background: linear-gradient(135deg, rgba(30,58,85,0.4), rgba(15,30,46,0.4));
-    border: 1px solid rgba(200,169,110,0.12);
-    border-radius: 4px;
-    padding: 1.5rem;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-
-  .skill-card:hover {
-    border-color: rgba(200,169,110,0.35);
-    transform: translateY(-2px);
-  }
-
-  .skill-card-title {
-    font-family: 'DM Mono', monospace;
+  .pill {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.85rem;
+    border-radius: 2px;
+    border: 1px solid rgba(192,57,43,0.35);
+    background: var(--red-pale);
+    color: #e07060;
   }
 
-  .skill-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .skill-item {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    font-size: 0.85rem;
-    color: var(--soft);
-  }
-
-  .skill-icon { font-size: 1rem; }
-
-  /* ─── LANGUAGES ─── */
-  .lang-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    .lang-grid { grid-template-columns: 1fr; }
-  }
-
-  .lang-card {
+  .status-card {
+    width: 220px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-top: 2px solid var(--red);
+    border-radius: 6px;
+    padding: 1.5rem 1.25rem;
     text-align: center;
-    padding: 2rem 1rem;
-    background: rgba(30,58,85,0.2);
-    border: 1px solid rgba(200,169,110,0.1);
-    border-radius: 4px;
-    transition: border-color 0.3s;
   }
 
-  .lang-card:hover { border-color: rgba(200,169,110,0.3); }
-
-  .lang-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 300;
-    color: var(--white);
-    margin-bottom: 0.3rem;
+  .avatar-ring {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--red);
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--red-soft);
+    margin: 0 auto 1rem;
   }
 
-  .lang-native {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--gold);
-    margin-bottom: 0.8rem;
-  }
-
-  .lang-bar-bg {
-    height: 2px;
-    background: rgba(200,169,110,0.15);
-    border-radius: 1px;
-    overflow: hidden;
-    margin: 0 auto;
-    max-width: 100px;
-  }
-
-  .lang-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    border-radius: 1px;
-    transform-origin: left;
-    animation: growBar 1.2s ease 0.5s both;
-  }
-
-  /* ─── EDUCATION ─── */
-  .edu-grid {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  .edu-card {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1.5rem;
-    background: rgba(22,40,64,0.5);
-    border: 1px solid rgba(200,169,110,0.1);
-    border-radius: 4px;
-    padding: 1.5rem 1.8rem;
-    transition: border-color 0.3s;
-  }
-
-  .edu-card:hover { border-color: rgba(200,169,110,0.25); }
-
-  .edu-year {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--gold);
-    white-space: nowrap;
-    padding-top: 0.2rem;
-  }
-
-  .edu-degree {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
+  .status-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
     color: var(--white);
     margin-bottom: 0.2rem;
   }
 
-  .edu-school {
-    font-size: 0.85rem;
+  .status-role {
+    font-size: 0.72rem;
     color: var(--muted);
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
   }
 
-  .edu-note {
-    font-size: 0.78rem;
-    color: var(--gold);
-    margin-top: 0.4rem;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.04em;
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    color: #6bcf8e;
+    background: rgba(107,207,142,0.1);
+    border: 1px solid rgba(107,207,142,0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
   }
 
-  /* ─── CERTIFICATIONS ─── */
-  .certs-grid {
+  .status-dot {
+    width: 6px; height: 6px;
+    background: #6bcf8e;
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  .status-meta { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; }
+
+  .rule {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 2rem;
+  }
+
+  /* STATS */
+  .stats-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
+    margin-bottom: 3rem;
   }
+
+  @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--red);
+    border-radius: 4px;
+    padding: 1.2rem;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-num span { font-size: 1.1rem; color: var(--red-soft); }
+  .stat-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+  /* ABOUT */
+  .about-cols {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 680px) { .about-cols { grid-template-columns: 1fr; gap: 2rem; } }
+
+  .about-body { font-size: 0.95rem; color: var(--text); line-height: 1.85; }
+  .about-body p + p { margin-top: 1rem; }
+  .hl { color: #e07060; font-weight: 400; }
+
+  .skills-visual { display: flex; flex-direction: column; gap: 1rem; }
+
+  .skill-row { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  .skill-pct {
+    color: var(--red-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+  }
+
+  .skill-track {
+    height: 5px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--red-soft));
+    border-radius: 3px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 8px; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 7px;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    border: 2px solid var(--red);
+    background: var(--bg);
+  }
+
+  .tl-item.featured::before {
+    background: var(--red);
+    box-shadow: 0 0 12px rgba(192,57,43,0.5);
+  }
+
+  .tl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem; margin-bottom: 0.3rem; }
+  .tl-date { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--red-soft); letter-spacing: 0.04em; }
+  .tl-org { font-size: 0.78rem; color: var(--muted); }
+  .tl-role { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--white); margin-bottom: 0.5rem; }
+  .tl-body { font-size: 0.85rem; color: var(--text); line-height: 1.75; }
+
+  .tl-bullets { margin-top: 0.7rem; display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .tl-bullet {
+    font-size: 0.82rem;
+    color: #aaa;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .tl-bullet::before { content: '›'; position: absolute; left: 0; color: var(--red-soft); }
+
+  .tl-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--red-soft);
+    border: 1px solid rgba(192,57,43,0.3);
+    background: var(--red-pale);
+    padding: 0.15rem 0.6rem;
+    border-radius: 2px;
+    margin-right: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  /* EDUCATION */
+  .edu-grid { display: grid; gap: 1rem; }
+
+  .edu-card {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.25s;
+  }
+
+  .edu-card:hover { border-color: rgba(192,57,43,0.4); }
+
+  .edu-year-col {
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--red-soft);
+    text-align: center;
+    line-height: 1.4;
+    border-right: 1px solid var(--border);
+  }
+
+  .edu-content { padding: 1rem 1.5rem; }
+  .edu-degree { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--white); margin-bottom: 0.2rem; }
+  .edu-school { font-size: 0.82rem; color: var(--muted); }
+  .edu-note { font-size: 0.75rem; color: var(--red-soft); margin-top: 0.4rem; font-family: 'JetBrains Mono', monospace; }
+
+  /* LANGUAGES */
+  .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 480px) { .lang-grid { grid-template-columns: 1fr; } }
+
+  .lang-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.8rem 1rem;
+    text-align: center;
+    transition: border-color 0.25s;
+  }
+
+  .lang-card:hover { border-color: rgba(192,57,43,0.35); }
+  .lang-script { font-size: 2.5rem; margin-bottom: 0.6rem; line-height: 1; }
+  .lang-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.2rem; }
+  .lang-level { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--red-soft); letter-spacing: 0.1em; margin-bottom: 1rem; }
+
+  .lang-dots { display: flex; justify-content: center; gap: 4px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); opacity: 0.2; }
+  .dot.on { opacity: 1; }
+
+  /* CHARTS */
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media (max-width: 660px) { .charts-grid { grid-template-columns: 1fr; } }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+
+  .chart-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+
+  /* CERTS */
+  .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.9rem; }
 
   .cert-item {
     display: flex;
-    align-items: flex-start;
     gap: 0.8rem;
-    padding: 1rem 1.2rem;
-    background: rgba(22,40,64,0.3);
-    border: 1px solid rgba(200,169,110,0.08);
+    padding: 0.9rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 4px;
-    transition: border-color 0.3s, background 0.3s;
+    align-items: flex-start;
+    transition: border-color 0.25s;
   }
 
-  .cert-item:hover {
-    background: rgba(30,58,85,0.4);
-    border-color: rgba(200,169,110,0.2);
-  }
+  .cert-item:hover { border-color: rgba(192,57,43,0.35); }
+  .cert-ico { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .cert-name { font-size: 0.82rem; color: var(--text); line-height: 1.45; }
+  .cert-sub { font-size: 0.7rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 0.2rem; }
 
-  .cert-icon {
-    font-size: 1.1rem;
-    margin-top: 0.1rem;
-    flex-shrink: 0;
-  }
+  /* RESEARCH */
+  .r-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
 
-  .cert-name {
+  .r-tag {
     font-size: 0.83rem;
-    color: var(--soft);
-    line-height: 1.5;
+    padding: 0.45rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    color: var(--text);
+    transition: border-color 0.25s, color 0.25s;
   }
 
-  .cert-issuer {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-top: 0.2rem;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.03em;
-  }
+  .r-tag:hover { border-color: rgba(192,57,43,0.5); color: #e07060; }
 
-  /* ─── CONTACT ─── */
-  .contact-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: center;
-  }
+  /* CONTACT */
+  .contact-row { display: flex; flex-wrap: wrap; gap: 1.2rem; }
 
   .contact-link {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.88rem;
+    gap: 0.5rem;
+    font-size: 0.85rem;
     color: var(--muted);
     text-decoration: none;
-    transition: color 0.2s;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.02em;
-  }
-
-  .contact-link:hover { color: var(--gold-light); }
-
-  /* ─── DIVIDER ─── */
-  .divider {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(200,169,110,0.2), transparent);
-  }
-
-  /* ─── FOOTER ─── */
-  footer {
-    position: relative; z-index: 1;
-    text-align: center;
-    padding: 3rem 2rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-  }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-
-  @keyframes scrollPulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
-  }
-
-  @keyframes growBar {
-    from { width: 0; }
-  }
-
-  /* ─── INTERSECTION OBSERVER CLASSES ─── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ─── HIGHLIGHT NUMBERS ─── */
-  .highlight { color: var(--gold-light); font-weight: 400; }
-
-  /* ─── RESEARCH INTERESTS ─── */
-  .research-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    margin-top: 1rem;
-  }
-
-  .r-tag {
-    padding: 0.5rem 1.2rem;
-    font-size: 0.82rem;
-    color: var(--text);
-    background: rgba(59,130,246,0.08);
-    border: 1px solid rgba(59,130,246,0.2);
-    border-radius: 2px;
-    transition: background 0.3s, border-color 0.3s;
-  }
-
-  .r-tag:hover {
-    background: rgba(59,130,246,0.15);
-    border-color: rgba(59,130,246,0.4);
-  }
-
-  /* ─── SCHOLARSHIP CALLOUT ─── */
-  .callout {
-    background: linear-gradient(135deg, rgba(200,169,110,0.08), rgba(200,169,110,0.03));
-    border: 1px solid rgba(200,169,110,0.25);
+    font-family: 'JetBrains Mono', monospace;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border2);
     border-radius: 4px;
-    padding: 1.5rem 2rem;
-    margin-top: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+    transition: color 0.2s, border-color 0.2s;
   }
 
-  .callout-icon { font-size: 1.8rem; flex-shrink: 0; }
+  .contact-link:hover { color: #e07060; border-color: rgba(192,57,43,0.4); }
 
-  .callout-text {
-    font-size: 0.9rem;
-    color: var(--soft);
-    line-height: 1.6;
+  footer {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: #444;
+    border-top: 1px solid var(--border);
   }
 
-  .callout-text strong { color: var(--gold-light); font-weight: 400; }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.in { opacity: 1; transform: none; }
 
-  @media (max-width: 600px) {
-    .edu-card { grid-template-columns: 1fr; gap: 0.5rem; }
-    .callout { flex-direction: column; gap: 0.8rem; }
-    h1 { font-size: 2.8rem; }
-    .lang-grid { grid-template-columns: repeat(3, 1fr); }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
   }
 </style>
 </head>
 <body>
 
+<div class="top-rule"></div>
+
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-line"></div>
-  <div class="hero-content">
-    <p class="eyebrow">Portfolio · Kobe, Japan · 2025</p>
+  <div>
+    <p class="label">Portfolio · Kobe, Japan · 2025</p>
     <h1>Wai <em>Yan</em> Lin</h1>
-    <p class="hero-subtitle">International Development · Education Economics · Digital Transformation</p>
-    <div class="hero-tags">
-      <span class="tag">MEXT Scholar 2025</span>
-      <span class="tag">Kobe University GSICS</span>
-      <span class="tag">World Bank Intern</span>
-      <span class="tag">MBA · Heriot-Watt</span>
-      <span class="tag">JCES Member</span>
-    </div>
-    <div class="hero-badges">
-      <span class="badge"><span class="badge-dot"></span>Trilingual: EN · ZH · MY</span>
-      <span class="badge"><span class="badge-dot"></span>7+ Years International Partnerships</span>
-      <span class="badge"><span class="badge-dot"></span>HSK Level 5 Certified</span>
-      <span class="badge"><span class="badge-dot"></span>USAID DISP Scholar 2024</span>
+    <p class="hero-title">International Development &nbsp;·&nbsp; Education Economics &nbsp;·&nbsp; Digital Transformation</p>
+    <div class="pill-row">
+      <span class="pill">MEXT Scholar 2025</span>
+      <span class="pill">Kobe University GSICS</span>
+      <span class="pill">World Bank Intern</span>
+      <span class="pill">MBA · Heriot-Watt</span>
+      <span class="pill">JCES Member</span>
+      <span class="pill">USAID DISP Scholar</span>
     </div>
   </div>
-  <div class="scroll-indicator">
-    <div class="scroll-line"></div>
-    <span>scroll</span>
+  <div class="hero-badge-col">
+    <div class="status-card">
+      <div class="avatar-ring">WYL</div>
+      <div class="status-name">Wai Yan Lin</div>
+      <div class="status-role">M.Econ Student<br>GSICS, Kobe University</div>
+      <div class="status-badge"><span class="status-dot"></span>Open to opportunities</div>
+      <div class="status-meta">📍 Kobe-shi, Hyogo, Japan</div>
+      <div class="status-meta" style="margin-top:0.3rem">📧 wylynnl@gmail.com</div>
+    </div>
   </div>
 </div>
 
-<!-- ABOUT -->
-<section class="reveal">
-  <p class="section-label">01 · About</p>
+<!-- KEY STATS -->
+<div class="wrap" style="padding-top:0;padding-bottom:3rem;">
+  <div class="stats-row reveal">
+    <div class="stat-card">
+      <div class="stat-num">500<span>+</span></div>
+      <div class="stat-desc">Students counselled & placed internationally</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">233<span>%</span></div>
+      <div class="stat-desc">Revenue growth at A-Link in 3 years</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">7<span>+</span></div>
+      <div class="stat-desc">Years in international education partnerships</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">3</div>
+      <div class="stat-desc">Languages fluent — EN · ZH · MY</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ABOUT + SKILL BARS -->
+<div class="wrap reveal">
+  <p class="label">01 · About</p>
   <h2>Bridging Education &amp; Development Policy</h2>
-  <div class="about-grid">
-    <div class="about-text">
-      <p>I am a <span class="highlight">MEXT 2025 Scholar</span> pursuing a Master of Economics at Kobe University's Graduate School of International Cooperation Studies (GSICS), focusing on digital literacy, education economics, and development policy in the ASEAN region.</p>
-      <p>With an MBA from Heriot-Watt University and over seven years leading international educational partnerships across Myanmar, Thailand, the UK, and the USA, I bring a rare combination of field-tested management experience and rigorous academic inquiry.</p>
-      <p>My recent internship at the <span class="highlight">World Bank</span> (Republic of Congo, 2026) deepened my commitment to leveraging data-driven policy for equitable development outcomes.</p>
+  <div class="about-cols">
+    <div class="about-body">
+      <p>I am a <span class="hl">MEXT 2025 Scholar</span> pursuing a Master of Economics at Kobe University's Graduate School of International Cooperation Studies (GSICS), studying digital literacy, education economics, and development policy in the ASEAN region under Professor Keiichi Ogawa.</p>
+      <p>With an MBA from <span class="hl">Heriot-Watt University</span> and seven-plus years leading international educational partnerships across Myanmar, Thailand, the UK, and the USA, I bring a rare combination of field-tested management experience and rigorous academic inquiry.</p>
+      <p>A recent internship at the <span class="hl">World Bank</span> (Republic of Congo, 2026) and membership in the Japan Comparative Education Society anchor my commitment to evidence-based development policy.</p>
     </div>
-    <div class="stat-block">
-      <div class="stat">
-        <div class="stat-num">500+</div>
-        <div class="stat-label">Students counselled & placed internationally</div>
+    <div class="skills-visual">
+      <div class="skill-row">
+        <div class="skill-header"><span>International Partnerships</span><span class="skill-pct">95%</span></div>
+        <div class="skill-track"><div class="skill-fill" data-w="95"></div></div>
       </div>
-      <div class="stat">
-        <div class="stat-num">233%</div>
-        <div class="stat-label">Revenue growth achieved within 3 years</div>
+      <div class="skill-row">
+        <div class="skill-header"><span>Stakeholder Communication</span><span class="skill-pct">92%</span></div>
+        <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
       </div>
-      <div class="stat">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Languages spoken fluently</div>
+      <div class="skill-row">
+        <div class="skill-header"><span>Education Policy & Research</span><span class="skill-pct">85%</span></div>
+        <div class="skill-track"><div class="skill-fill" data-w="85"></div></div>
       </div>
-      <div class="stat">
-        <div class="stat-num">10+</div>
-        <div class="stat-label">University partnerships forged across ASEAN & UK</div>
+      <div class="skill-row">
+        <div class="skill-header"><span>Data Analysis (STATA / Tableau)</span><span class="skill-pct">75%</span></div>
+        <div class="skill-track"><div class="skill-fill" data-w="75"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span>Grant & Report Writing</span><span class="skill-pct">88%</span></div>
+        <div class="skill-track"><div class="skill-fill" data-w="88"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span>Digital Transformation Strategy</span><span class="skill-pct">78%</span></div>
+        <div class="skill-track"><div class="skill-fill" data-w="78"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- CHARTS / INFOGRAPHICS -->
+<div class="wrap reveal">
+  <p class="label">02 · Infographics</p>
+  <h2>Career at a Glance</h2>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Experience by role (years)</div>
+      <div style="position:relative;height:200px;">
+        <canvas id="barChart" role="img" aria-label="Bar chart of years in each career role">Experience: Partnerships Manager 3.1yr, Liaison Officer 3.8yr, Interpreter 4yr, World Bank 0.2yr, Kobe Univ 2yr</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Core competency profile</div>
+      <div style="position:relative;height:200px;">
+        <canvas id="radarChart" role="img" aria-label="Radar chart of core competencies across 6 dimensions">Partnerships 95, Research 82, Languages 92, Analytics 75, Communication 91, Policy 80</canvas>
       </div>
     </div>
   </div>
 
-  <div class="callout reveal">
-    <div class="callout-icon">🎌</div>
-    <div class="callout-text">
-      <strong>Currently based in Kobe, Japan</strong> — pursuing a Master of Economics (Development Policy) under Prof. Keiichi Ogawa at GSICS, Kobe University. Expected graduation: September 2027. Open to research collaborations, internships, and professional opportunities aligned with international development and digital transformation.
+  <div class="chart-card" style="margin-top:2rem;">
+    <div class="chart-title">University partnership footprint</div>
+    <div style="display:flex;flex-wrap:wrap;gap:2rem;margin-top:0.5rem;align-items:center;">
+      <div style="flex:0 0 180px;">
+        <div style="position:relative;height:180px;width:180px;">
+          <canvas id="donutChart" role="img" aria-label="Donut chart: UK 4, ASEAN 3, USA 2, partnerships">UK 4, ASEAN 3, USA 2, Japan 1</canvas>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:0.8rem;justify-content:center;">
+          <span style="display:flex;align-items:center;gap:4px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;"><span style="width:8px;height:8px;border-radius:2px;background:#c0392b;display:inline-block;"></span>UK</span>
+          <span style="display:flex;align-items:center;gap:4px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;"><span style="width:8px;height:8px;border-radius:2px;background:#e05c4e;display:inline-block;"></span>ASEAN</span>
+          <span style="display:flex;align-items:center;gap:4px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;"><span style="width:8px;height:8px;border-radius:2px;background:rgba(192,57,43,0.5);display:inline-block;"></span>USA</span>
+        </div>
+      </div>
+      <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
+          <span style="font-size:1rem;flex-shrink:0;">🇬🇧</span>
+          <span style="font-size:0.82rem;color:var(--text);">Wolverhampton · Oxford Brookes · Liverpool JMU · Heriot-Watt</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
+          <span style="font-size:1rem;flex-shrink:0;">🇹🇭</span>
+          <span style="font-size:0.82rem;color:var(--text);">KMUTT — King Mongkut's University of Technology Thonburi</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
+          <span style="font-size:1rem;flex-shrink:0;">🇺🇸</span>
+          <span style="font-size:0.82rem;color:var(--text);">Rochester Institute of Technology · University of Arizona (USAID)</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
+          <span style="font-size:1rem;flex-shrink:0;">🇲🇾</span>
+          <span style="font-size:0.82rem;color:var(--text);">University of Nottingham Malaysia — International Summer School</span>
+        </div>
+       </div>
     </div>
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<div class="rule"></div>
 
 <!-- RESEARCH -->
-<section class="reveal">
-  <p class="section-label">02 · Research</p>
+<div class="wrap reveal">
+  <p class="label">03 · Research</p>
   <h2>Areas of Focus</h2>
-  <div class="about-text">
-    <p>My research sits at the intersection of education economics, technology policy, and international development — with a focus on Southeast Asia and the broader ASEAN context. I am particularly interested in how digital literacy initiatives and EdTech interventions can drive human capital development in emerging economies.</p>
-  </div>
-  <div class="research-tags">
+  <p style="font-size:0.95rem;color:var(--text);line-height:1.85;max-width:640px;">Research at the intersection of education economics, technology policy, and international development — with a focus on Southeast Asia and ASEAN. Particularly interested in how digital literacy initiatives and EdTech interventions drive human capital development in emerging economies.</p>
+  <div class="r-tags">
     <span class="r-tag">Digital Literacy</span>
     <span class="r-tag">Education Economics</span>
     <span class="r-tag">EdTech & Digital Transformation</span>
@@ -758,261 +628,295 @@
     <span class="r-tag">International Collaboration</span>
     <span class="r-tag">ASEAN Human Capital</span>
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<div class="rule"></div>
 
 <!-- EXPERIENCE -->
-<section class="reveal">
-  <p class="section-label">03 · Experience</p>
+<div class="wrap reveal">
+  <p class="label">04 · Experience</p>
   <h2>Professional Journey</h2>
   <div class="timeline">
-
-    <div class="timeline-item reveal">
+    <div class="tl-item featured reveal">
       <div class="tl-meta">
         <span class="tl-date">Feb – Mar 2026</span>
-        <span class="tl-org">World Bank · Republic of Congo</span>
+        <span class="tl-org">World Bank · Republic of Congo (Online)</span>
       </div>
-      <div class="tl-role">Intern (Online)</div>
-      <div class="tl-desc">Contributed to World Bank operations in the Republic of Congo, engaging with international development frameworks and policy analysis at a global institutional level.</div>
+      <div class="tl-role">Intern</div>
+      <div class="tl-body">Contributed to World Bank operations — engaging with international development frameworks and policy analysis at a global institutional level.</div>
+      <div><span class="tl-tag">Global Development</span><span class="tl-tag">Policy Analysis</span></div>
     </div>
-
-    <div class="timeline-item reveal">
+    <div class="tl-item featured reveal">
       <div class="tl-meta">
         <span class="tl-date">Jan 2022 – Feb 2025</span>
         <span class="tl-org">Strategy First Education Group · Yangon, Myanmar</span>
       </div>
       <div class="tl-role">International Partnerships Manager</div>
-      <div class="tl-desc">Led the establishment and growth of A-Link Education Consultancy from the ground up, building a team and operational infrastructure serving over 500 students.</div>
-      <div class="tl-highlights">
-        <span class="tl-highlight">Boosted revenue by 233% within the first three years of founding</span>
-        <span class="tl-highlight">Managed partnerships with KMUTT (Thailand), RIT (USA), University of Wolverhampton (UK)</span>
-        <span class="tl-highlight">Led delegation of 50 students to University of Nottingham International Summer School (Malaysia)</span>
-        <span class="tl-highlight">Established British Council IELTS Test Centre in Mandalay as certified Test Site Administrator</span>
-        <span class="tl-highlight">Reported for JICA, USAID, and American Centre Yangon funded projects</span>
+      <div class="tl-body">Founded and scaled A-Link Education Consultancy — building a team and infrastructure serving 500+ students, growing revenue by 233% in three years.</div>
+      <div class="tl-bullets">
+        <span class="tl-bullet">Managed partnerships with KMUTT (Thailand), RIT (USA), University of Wolverhampton (UK)</span>
+        <span class="tl-bullet">Led 50-person delegation to University of Nottingham International Summer School, Malaysia</span>
+        <span class="tl-bullet">Established British Council IELTS Test Centre in Mandalay as certified Test Site Administrator</span>
+        <span class="tl-bullet">Drafted reports for JICA, USAID, and American Centre Yangon funded projects</span>
       </div>
+      <div><span class="tl-tag">Education Partnerships</span><span class="tl-tag">Business Development</span><span class="tl-tag">JICA · USAID</span></div>
     </div>
-
-    <div class="timeline-item reveal">
+    <div class="tl-item reveal">
       <div class="tl-meta">
         <span class="tl-date">Feb 2018 – Dec 2021</span>
         <span class="tl-org">Strategy First Education Group · Yangon, Myanmar</span>
       </div>
       <div class="tl-role">Liaison Officer</div>
-      <div class="tl-desc">Served as primary liaison between international education partners and internal university departments; supported the Corporate Affairs Director in strategic and administrative operations.</div>
-      <div class="tl-highlights">
-        <span class="tl-highlight">Coordinated partnership validation with Oxford Brookes University and Liverpool John Moores University</span>
-        <span class="tl-highlight">Authored SOPs and policy documents aligning academic operations with international standards</span>
-        <span class="tl-highlight">Executed cross-SBU strategic initiatives directly instructed by senior leadership</span>
+      <div class="tl-body">Primary liaison between international education partners and internal university departments; supported Corporate Affairs Director in strategic operations.</div>
+      <div class="tl-bullets">
+        <span class="tl-bullet">Validated partnerships with Oxford Brookes University and Liverpool John Moores University</span>
+        <span class="tl-bullet">Authored SOPs and policy documents aligning academic operations with international standards</span>
       </div>
+      <div><span class="tl-tag">SOPs & Policy</span><span class="tl-tag">Corporate Affairs</span></div>
     </div>
-
-    <div class="timeline-item reveal">
+    <div class="tl-item reveal">
       <div class="tl-meta">
         <span class="tl-date">2013 – 2017</span>
         <span class="tl-org">Freelance · Myanmar</span>
       </div>
       <div class="tl-role">Chinese–English–Burmese Interpreter</div>
-      <div class="tl-desc">Delivered high-stakes interpretation for government ministries, infrastructure projects, and diplomatic engagements — including a confidential one-week mission to China for the Ministry of Defence and ministerial negotiations with the Myanmar Ministry of Construction.</div>
+      <div class="tl-body">High-stakes interpretation for government ministries and diplomatic engagements — including a confidential mission to China for the Ministry of Defence and ministerial negotiations with Myanmar's Ministry of Construction.</div>
+      <div><span class="tl-tag">Government / Diplomatic</span><span class="tl-tag">Technical Interpretation</span></div>
     </div>
-
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<div class="rule"></div>
 
 <!-- EDUCATION -->
-<section class="reveal">
-  <p class="section-label">04 · Education</p>
+<div class="wrap reveal">
+  <p class="label">05 · Education</p>
   <h2>Academic Formation</h2>
   <div class="edu-grid">
-
-    <div class="edu-card reveal">
-      <div class="edu-year">2025–2027</div>
-      <div>
+    <div class="edu-card">
+      <div class="edu-year-col">2025<br>–<br>2027</div>
+      <div class="edu-content">
         <div class="edu-degree">Master of Economics (Development Policy)</div>
-        <div class="edu-school">Graduate School of International Cooperation Studies (GSICS), Kobe University — Japan</div>
-        <div class="edu-note">🎌 MEXT 2025 Scholarship · Ogawa Seminar · JCES Member</div>
+        <div class="edu-school">Graduate School of International Cooperation Studies (GSICS) · Kobe University, Japan</div>
+        <div class="edu-note">MEXT 2025 Scholarship · Ogawa Seminar · JCES Member</div>
       </div>
     </div>
-
-    <div class="edu-card reveal">
-      <div class="edu-year">2019–2021</div>
-      <div>
+    <div class="edu-card">
+      <div class="edu-year-col">2019<br>–<br>2021</div>
+      <div class="edu-content">
         <div class="edu-degree">Master of Business Administration (MBA)</div>
-        <div class="edu-school">Edinburgh Business School, Heriot-Watt University — UK</div>
-        <div class="edu-note">🏛 Employment Scholarship · Conferred October 31, 2021</div>
+        <div class="edu-school">Edinburgh Business School · Heriot-Watt University, UK</div>
+        <div class="edu-note">Employment Scholarship · Conferred October 31, 2021</div>
       </div>
     </div>
-
-    <div class="edu-card reveal">
-      <div class="edu-year">2014–2017</div>
-      <div>
+    <div class="edu-card">
+      <div class="edu-year-col">2014<br>–<br>2017</div>
+      <div class="edu-content">
         <div class="edu-degree">B.A. English for Professional Purposes</div>
-        <div class="edu-school">University of Yangon / National Management Degree College — Myanmar</div>
-        <div class="edu-note">📚 Graduated December 2017 · Reg. No. 239189</div>
+        <div class="edu-school">University of Yangon / National Management Degree College, Myanmar</div>
+        <div class="edu-note">Graduated Dec 2017 · Reg. No. 239189</div>
       </div>
     </div>
-
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<div class="rule"></div>
 
 <!-- LANGUAGES -->
-<section class="reveal">
-  <p class="section-label">05 · Languages</p>
+<div class="wrap reveal">
+  <p class="label">06 · Languages</p>
   <h2>Multilingual Proficiency</h2>
   <div class="lang-grid">
-    <div class="lang-card reveal">
+    <div class="lang-card">
+      <div class="lang-script">A</div>
       <div class="lang-name">English</div>
-      <div class="lang-native">Fluent</div>
-      <div class="lang-bar-bg"><div class="lang-bar" style="width:96%"></div></div>
-    </div>
-    <div class="lang-card reveal">
-      <div class="lang-name">中文</div>
-      <div class="lang-native">HSK Level 5 · Fluent</div>
-      <div class="lang-bar-bg"><div class="lang-bar" style="width:88%"></div></div>
-    </div>
-    <div class="lang-card reveal">
-      <div class="lang-name">မြန်မာ</div>
-      <div class="lang-native">Native</div>
-      <div class="lang-bar-bg"><div class="lang-bar" style="width:100%"></div></div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- SKILLS -->
-<section class="reveal">
-  <p class="section-label">06 · Skills</p>
-  <h2>Technical &amp; Professional Competencies</h2>
-  <div class="skills-grid">
-    <div class="skill-card reveal">
-      <div class="skill-card-title">Data & Analytics</div>
-      <div class="skill-list">
-        <span class="skill-item"><span class="skill-icon">📊</span>STATA (Econometric Analysis)</span>
-        <span class="skill-item"><span class="skill-icon">📈</span>Tableau (Data Visualisation)</span>
-        <span class="skill-item"><span class="skill-icon">🔬</span>Business Analytics Science</span>
+      <div class="lang-level">Fluent</div>
+      <div class="lang-dots">
+        <span class="dot on"></span><span class="dot on"></span><span class="dot on"></span>
+        <span class="dot on"></span><span class="dot on"></span>
       </div>
     </div>
-    <div class="skill-card reveal">
-      <div class="skill-card-title">Management</div>
-      <div class="skill-list">
-        <span class="skill-item"><span class="skill-icon">🤝</span>Stakeholder Engagement</span>
-        <span class="skill-item"><span class="skill-icon">🏗</span>Partnership Development</span>
-        <span class="skill-item"><span class="skill-icon">📋</span>SOP & Policy Authorship</span>
+    <div class="lang-card">
+      <div class="lang-script">中</div>
+      <div class="lang-name">Mandarin</div>
+      <div class="lang-level">HSK Level 5 · Fluent</div>
+      <div class="lang-dots">
+        <span class="dot on"></span><span class="dot on"></span><span class="dot on"></span>
+        <span class="dot on"></span><span class="dot"></span>
       </div>
     </div>
-    <div class="skill-card reveal">
-      <div class="skill-card-title">Communication</div>
-      <div class="skill-list">
-        <span class="skill-item"><span class="skill-icon">🎤</span>Public Speaking & MC</span>
-        <span class="skill-item"><span class="skill-icon">🌐</span>Cross-Cultural Diplomacy</span>
-        <span class="skill-item"><span class="skill-icon">✍️</span>Report & Grant Writing</span>
-      </div>
-    </div>
-    <div class="skill-card reveal">
-      <div class="skill-card-title">Digital Tools</div>
-      <div class="skill-list">
-        <span class="skill-item"><span class="skill-icon">💼</span>Microsoft Office 365</span>
-        <span class="skill-item"><span class="skill-icon">📱</span>Social Media Marketing</span>
-        <span class="skill-item"><span class="skill-icon">🎬</span>Audio/Video Editing</span>
+    <div class="lang-card">
+      <div class="lang-script">မ</div>
+      <div class="lang-name">Burmese</div>
+      <div class="lang-level">Native</div>
+      <div class="lang-dots">
+        <span class="dot on"></span><span class="dot on"></span><span class="dot on"></span>
+        <span class="dot on"></span><span class="dot on"></span>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<div class="rule"></div>
 
 <!-- CERTIFICATIONS -->
-<section class="reveal">
-  <p class="section-label">07 · Certifications</p>
-  <h2>Professional Credentials</h2>
+<div class="wrap reveal">
+  <p class="label">07 · Credentials</p>
+  <h2>Certifications &amp; Awards</h2>
   <div class="certs-grid">
-    <div class="cert-item reveal">
-      <span class="cert-icon">🎓</span>
+    <div class="cert-item">
+      <span class="cert-ico">🎓</span>
       <div>
         <div class="cert-name">Certificate in Business Analytics Science</div>
-        <div class="cert-issuer">University of Arizona · USAID DISP Scholar · 2024</div>
+        <div class="cert-sub">University of Arizona · USAID DISP Scholar · 2024</div>
       </div>
     </div>
-    <div class="cert-item reveal">
-      <span class="cert-icon">🇬🇧</span>
+    <div class="cert-item">
+      <span class="cert-ico">🇬🇧</span>
       <div>
         <div class="cert-name">UK Education Agent & Counsellor Certification</div>
-        <div class="cert-issuer">British Council · 2023</div>
+        <div class="cert-sub">British Council · 2023</div>
       </div>
     </div>
-    <div class="cert-item reveal">
-      <span class="cert-icon">📝</span>
+    <div class="cert-item">
+      <span class="cert-ico">📋</span>
       <div>
         <div class="cert-name">IELTS Test Centre Administration & Exam Officer</div>
-        <div class="cert-issuer">British Council · 2023</div>
+        <div class="cert-sub">British Council · 2023</div>
       </div>
     </div>
-    <div class="cert-item reveal">
-      <span class="cert-icon">🏫</span>
+    <div class="cert-item">
+      <span class="cert-ico">🏫</span>
       <div>
         <div class="cert-name">Doing Business in Asia — First Class (70/100)</div>
-        <div class="cert-issuer">University of Nottingham Malaysia · 2023</div>
+        <div class="cert-sub">University of Nottingham Malaysia · 2023</div>
       </div>
     </div>
-    <div class="cert-item reveal">
-      <span class="cert-icon">🀄</span>
+    <div class="cert-item">
+      <span class="cert-ico">🀄</span>
       <div>
-        <div class="cert-name">HSK Level 5 Chinese Proficiency (Score: 212/300)</div>
-        <div class="cert-issuer">Hanban / Confucius Institute HQ · 2010</div>
+        <div class="cert-name">HSK Level 5 Chinese Proficiency (212 / 300)</div>
+        <div class="cert-sub">Hanban / Confucius Institute HQ · 2010</div>
       </div>
     </div>
-    <div class="cert-item reveal">
-      <span class="cert-icon">🛡</span>
+    <div class="cert-item">
+      <span class="cert-ico">🛡</span>
       <div>
-        <div class="cert-name">BC Mandatory: Fraud Awareness, Child Protection, Safeguarding, EDI</div>
-        <div class="cert-issuer">British Council Global L&D · 2023</div>
+        <div class="cert-name">BC Mandatory: Fraud Awareness · Child Protection · Safeguarding · EDI · IELTS Invigilation</div>
+        <div class="cert-sub">British Council Global L&D · 2023</div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<div class="rule"></div>
 
 <!-- CONTACT -->
-<section class="reveal">
-  <p class="section-label">08 · Connect</p>
+<div class="wrap reveal">
+  <p class="label">08 · Connect</p>
   <h2>Get in Touch</h2>
   <div class="contact-row">
-    <a class="contact-link" href="mailto:wylynnl@gmail.com">
-      <span>✉</span> wylynnl@gmail.com
-    </a>
-    <a class="contact-link" href="https://www.linkedin.com/in/wai-yan-lin-r2y4u96/" target="_blank">
-      <span>in</span> LinkedIn
-    </a>
-    <a class="contact-link" href="https://gsics-ogawa.com/archives/student/wai-yan-lin" target="_blank">
-      <span>🎓</span> Kobe University · Ogawa Seminar
-    </a>
-    <span class="contact-link">
-      <span>📍</span> Kobe, Japan
-    </span>
+    <a class="contact-link" href="mailto:wylynnl@gmail.com">✉ wylynnl@gmail.com</a>
+    <a class="contact-link" href="https://www.linkedin.com/in/wai-yan-lin-r2y4u96/" target="_blank">in LinkedIn</a>
+    <a class="contact-link" href="https://gsics-ogawa.com/archives/student/wai-yan-lin" target="_blank">🎓 Kobe University</a>
+    <span class="contact-link">📍 Kobe, Japan</span>
   </div>
-</section>
+</div>
 
 <footer>
-  <p>© 2025 Wai Yan Lin &nbsp;·&nbsp; Kobe University GSICS &nbsp;·&nbsp; Built with intention</p>
+  © 2025 Wai Yan Lin &nbsp;·&nbsp; Kobe University GSICS · Japan &nbsp;·&nbsp; Built with intention
 </footer>
 
 <script>
-  // Intersection Observer for reveal animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  const skillObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.skill-fill').forEach(bar => {
+          bar.style.width = bar.dataset.w + '%';
+        });
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.skills-visual').forEach(el => skillObs.observe(el));
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  const red = '#c0392b';
+  const redSoft = '#e05c4e';
+  const gridColor = 'rgba(255,255,255,0.07)';
+  const labelColor = '#888';
+
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Partnerships Mgr', 'Liaison Officer', 'Interpreter', 'World Bank', 'Kobe Univ'],
+      datasets: [{
+        label: 'Years',
+        data: [3.1, 3.8, 4, 0.2, 2],
+        backgroundColor: [red, red, 'rgba(192,57,43,0.4)', '#e05c4e', 'rgba(192,57,43,0.4)'],
+        borderColor: [red, red, redSoft, redSoft, redSoft],
+        borderWidth: 1,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: labelColor, font: { size: 10 }, maxRotation: 30, autoSkip: false }, grid: { color: gridColor } },
+        y: { ticks: { color: labelColor, font: { size: 11 } }, grid: { color: gridColor }, beginAtZero: true }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['Partnerships', 'Research', 'Languages', 'Analytics', 'Communication', 'Policy'],
+      datasets: [{
+        data: [95, 82, 92, 75, 91, 80],
+        backgroundColor: 'rgba(192,57,43,0.18)',
+        borderColor: red,
+        borderWidth: 1.5,
+        pointBackgroundColor: red,
+        pointRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          ticks: { display: false },
+          grid: { color: gridColor },
+          angleLines: { color: gridColor },
+          pointLabels: { color: labelColor, font: { size: 10 } },
+          min: 0, max: 100
+        }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('donutChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['UK', 'ASEAN', 'USA', 'Japan'],
+      datasets: [{
+        data: [4, 3, 2, 1],
+        backgroundColor: ['#c0392b', '#e05c4e', 'rgba(192,57,43,0.5)', 'rgba(192,57,43,0.25)'],
+        borderColor: '#1a1a1a',
+        borderWidth: 2,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: { legend: { display: false } }
+    }
+  });
 </script>
 </body>
 </html>
