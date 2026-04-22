@@ -4,919 +4,1451 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wai Yan Lin — International Development & Education Policy</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:       #111111;
-    --surface:  #1a1a1a;
-    --surface2: #222222;
-    --border:   rgba(255,255,255,0.08);
-    --border2:  rgba(255,255,255,0.14);
-    --red:      #c0392b;
-    --red-soft: #e05c4e;
-    --red-pale: rgba(192,57,43,0.12);
-    --white:    #f5f5f5;
-    --text:     #cccccc;
-    --muted:    #888888;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 300;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
-
-  .top-rule {
-    height: 3px;
-    background: linear-gradient(90deg, var(--red) 0%, var(--red-soft) 40%, transparent 100%);
-  }
-
-  .hero {
-    padding: 5rem 2rem 4rem;
-    max-width: 1000px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 3rem;
-    align-items: center;
-  }
-
-  @media (max-width: 700px) {
-    .hero { grid-template-columns: 1fr; }
-    .hero-badge-col { display: none; }
-  }
-
-  .label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--red-soft);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .label::before {
-    content: '';
-    width: 20px; height: 2px;
-    background: var(--red);
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    font-weight: 400;
-    line-height: 1.05;
-    color: var(--white);
-    margin-bottom: 0.5rem;
-  }
-
-  h1 em { font-style: italic; color: var(--red-soft); }
-
-  .hero-title {
-    font-size: 1rem;
-    color: var(--muted);
-    font-weight: 400;
-    margin-bottom: 2rem;
-    letter-spacing: 0.05em;
-  }
-
-  .pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-
-  .pill {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.06em;
-    padding: 0.3rem 0.85rem;
-    border-radius: 2px;
-    border: 1px solid rgba(192,57,43,0.35);
-    background: var(--red-pale);
-    color: #e07060;
-  }
-
-  .status-card {
-    width: 220px;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-top: 2px solid var(--red);
-    border-radius: 6px;
-    padding: 1.5rem 1.25rem;
-    text-align: center;
-  }
-
-  .avatar-ring {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    border: 2px solid var(--red);
-    background: var(--surface2);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    color: var(--red-soft);
-    margin: 0 auto 1rem;
-  }
-
-  .status-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    color: var(--white);
-    margin-bottom: 0.2rem;
-  }
-
-  .status-role {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-bottom: 1.2rem;
-    line-height: 1.4;
-  }
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.7rem;
-    color: #6bcf8e;
-    background: rgba(107,207,142,0.1);
-    border: 1px solid rgba(107,207,142,0.2);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    margin-bottom: 0.8rem;
-  }
-
-  .status-dot {
-    width: 6px; height: 6px;
-    background: #6bcf8e;
-    border-radius: 50%;
-    animation: blink 2s ease-in-out infinite;
-  }
-
-  .status-meta { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
-
-  .wrap { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; }
-
-  .rule {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    height: 1px;
-    background: var(--border);
-  }
-
-  h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-    font-weight: 400;
-    color: var(--white);
-    margin-bottom: 2rem;
-  }
-
-  /* STATS */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-bottom: 3rem;
-  }
-
-  @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
-
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 2px solid var(--red);
-    border-radius: 4px;
-    padding: 1.2rem;
-  }
-
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--white);
-    line-height: 1;
-    margin-bottom: 0.3rem;
-  }
-
-  .stat-num span { font-size: 1.1rem; color: var(--red-soft); }
-  .stat-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
-
-  /* ABOUT */
-  .about-cols {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 3rem;
-    align-items: start;
-  }
-
-  @media (max-width: 680px) { .about-cols { grid-template-columns: 1fr; gap: 2rem; } }
-
-  .about-body { font-size: 0.95rem; color: var(--text); line-height: 1.85; }
-  .about-body p + p { margin-top: 1rem; }
-  .hl { color: #e07060; font-weight: 400; }
-
-  .skills-visual { display: flex; flex-direction: column; gap: 1rem; }
-
-  .skill-row { display: flex; flex-direction: column; gap: 0.3rem; }
-
-  .skill-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--text);
-  }
-
-  .skill-pct {
-    color: var(--red-soft);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-  }
-
-  .skill-track {
-    height: 5px;
-    background: var(--surface2);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .skill-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--red), var(--red-soft));
-    border-radius: 3px;
-    width: 0;
-    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* TIMELINE */
-  .timeline { position: relative; }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 6px; top: 8px; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--red), transparent);
-  }
-
-  .tl-item {
-    position: relative;
-    padding-left: 2.5rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .tl-item::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 7px;
-    width: 13px; height: 13px;
-    border-radius: 50%;
-    border: 2px solid var(--red);
-    background: var(--bg);
-  }
-
-  .tl-item.featured::before {
-    background: var(--red);
-    box-shadow: 0 0 12px rgba(192,57,43,0.5);
-  }
-
-  .tl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem; margin-bottom: 0.3rem; }
-  .tl-date { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--red-soft); letter-spacing: 0.04em; }
-  .tl-org { font-size: 0.78rem; color: var(--muted); }
-  .tl-role { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--white); margin-bottom: 0.5rem; }
-  .tl-body { font-size: 0.85rem; color: var(--text); line-height: 1.75; }
-
-  .tl-bullets { margin-top: 0.7rem; display: flex; flex-direction: column; gap: 0.3rem; }
-
-  .tl-bullet {
-    font-size: 0.82rem;
-    color: #aaa;
-    padding-left: 1rem;
-    position: relative;
-  }
-
-  .tl-bullet::before { content: '›'; position: absolute; left: 0; color: var(--red-soft); }
-
-  .tl-tag {
-    display: inline-block;
-    font-size: 0.65rem;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--red-soft);
-    border: 1px solid rgba(192,57,43,0.3);
-    background: var(--red-pale);
-    padding: 0.15rem 0.6rem;
-    border-radius: 2px;
-    margin-right: 0.4rem;
-    margin-top: 0.5rem;
-  }
-
-  /* EDUCATION */
-  .edu-grid { display: grid; gap: 1rem; }
-
-  .edu-card {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: border-color 0.25s;
-  }
-
-  .edu-card:hover { border-color: rgba(192,57,43,0.4); }
-
-  .edu-year-col {
-    background: var(--surface2);
-    display: flex; align-items: center; justify-content: center;
-    padding: 1rem 0.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--red-soft);
-    text-align: center;
-    line-height: 1.4;
-    border-right: 1px solid var(--border);
-  }
-
-  .edu-content { padding: 1rem 1.5rem; }
-  .edu-degree { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--white); margin-bottom: 0.2rem; }
-  .edu-school { font-size: 0.82rem; color: var(--muted); }
-  .edu-note { font-size: 0.75rem; color: var(--red-soft); margin-top: 0.4rem; font-family: 'JetBrains Mono', monospace; }
-
-  /* LANGUAGES */
-  .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  @media (max-width: 480px) { .lang-grid { grid-template-columns: 1fr; } }
-
-  .lang-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1.8rem 1rem;
-    text-align: center;
-    transition: border-color 0.25s;
-  }
-
-  .lang-card:hover { border-color: rgba(192,57,43,0.35); }
-  .lang-script { font-size: 2.5rem; margin-bottom: 0.6rem; line-height: 1; }
-  .lang-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.2rem; }
-  .lang-level { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--red-soft); letter-spacing: 0.1em; margin-bottom: 1rem; }
-
-  .lang-dots { display: flex; justify-content: center; gap: 4px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); opacity: 0.2; }
-  .dot.on { opacity: 1; }
-
-  /* CHARTS */
-  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-  @media (max-width: 660px) { .charts-grid { grid-template-columns: 1fr; } }
-
-  .chart-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.5rem;
-  }
-
-  .chart-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 1.2rem;
-  }
-
-  /* CERTS */
-  .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.9rem; }
-
-  .cert-item {
-    display: flex;
-    gap: 0.8rem;
-    padding: 0.9rem 1.1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    align-items: flex-start;
-    transition: border-color 0.25s;
-  }
-
-  .cert-item:hover { border-color: rgba(192,57,43,0.35); }
-  .cert-ico { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
-  .cert-name { font-size: 0.82rem; color: var(--text); line-height: 1.45; }
-  .cert-sub { font-size: 0.7rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 0.2rem; }
-
-  /* RESEARCH */
-  .r-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
-
-  .r-tag {
-    font-size: 0.83rem;
-    padding: 0.45rem 1.1rem;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 2px;
-    color: var(--text);
-    transition: border-color 0.25s, color 0.25s;
-  }
-
-  .r-tag:hover { border-color: rgba(192,57,43,0.5); color: #e07060; }
-
-  /* CONTACT */
-  .contact-row { display: flex; flex-wrap: wrap; gap: 1.2rem; }
-
-  .contact-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--muted);
-    text-decoration: none;
-    font-family: 'JetBrains Mono', monospace;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border2);
-    border-radius: 4px;
-    transition: color 0.2s, border-color 0.2s;
-  }
-
-  .contact-link:hover { color: #e07060; border-color: rgba(192,57,43,0.4); }
-
-  footer {
-    text-align: center;
-    padding: 2.5rem 2rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: #444;
-    border-top: 1px solid var(--border);
-  }
-
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
-  .reveal.in { opacity: 1; transform: none; }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --cream:    #F7F4EE;
+  --cream2:   #EDE9E0;
+  --cream3:   #E2DDD3;
+  --ink:      #1C1A17;
+  --ink2:     #3D3A35;
+  --ink3:     #6B6760;
+  --wine:     #7A2230;
+  --wine2:    #9B3344;
+  --wine-bg:  rgba(122,34,48,0.07);
+  --wine-bd:  rgba(122,34,48,0.18);
+  --gold:     #B08D57;
+  --border:   rgba(28,26,23,0.10);
+  --border2:  rgba(28,26,23,0.18);
+  --nav-w:    260px;
+  --ease:     cubic-bezier(0.4,0,0.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  font-weight:300;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ── SIDEBAR NAV ───────────────────────────────────── */
+.sidebar{
+  position:fixed;
+  top:0;left:0;bottom:0;
+  width:var(--nav-w);
+  background:var(--ink);
+  display:flex;
+  flex-direction:column;
+  padding:3rem 2rem;
+  z-index:100;
+  transition:transform 0.35s var(--ease);
+}
+
+.sidebar-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;
+  font-weight:500;
+  color:#F7F4EE;
+  letter-spacing:-0.01em;
+  margin-bottom:0.2rem;
+  line-height:1.1;
+}
+
+.sidebar-logo em{
+  font-style:italic;
+  color:var(--wine2);
+}
+
+.sidebar-sub{
+  font-size:0.68rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:rgba(247,244,238,0.35);
+  font-family:'JetBrains Mono',monospace;
+  margin-bottom:3rem;
+}
+
+.nav-section{
+  font-size:0.62rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:rgba(247,244,238,0.25);
+  font-family:'JetBrains Mono',monospace;
+  margin-bottom:0.8rem;
+  margin-top:1.5rem;
+}
+
+.nav-section:first-of-type{margin-top:0}
+
+nav a{
+  display:flex;
+  align-items:center;
+  gap:0.7rem;
+  color:rgba(247,244,238,0.5);
+  text-decoration:none;
+  font-size:0.8rem;
+  padding:0.4rem 0;
+  transition:color 0.2s;
+  border:none;
+  background:none;
+  font-family:'Inter',sans-serif;
+  font-weight:300;
+  cursor:pointer;
+}
+
+nav a::before{
+  content:'';
+  width:16px;height:1px;
+  background:currentColor;
+  flex-shrink:0;
+  transition:width 0.2s,background 0.2s;
+}
+
+nav a:hover,nav a.active{color:#F7F4EE;}
+nav a.active::before{width:24px;background:var(--wine2);}
+nav a:hover::before{width:20px;}
+
+.sidebar-footer{
+  margin-top:auto;
+  padding-top:2rem;
+  border-top:1px solid rgba(247,244,238,0.08);
+}
+
+.sidebar-contact-link{
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  color:rgba(247,244,238,0.4);
+  text-decoration:none;
+  font-size:0.72rem;
+  font-family:'JetBrains Mono',monospace;
+  padding:0.35rem 0;
+  transition:color 0.2s;
+}
+
+.sidebar-contact-link:hover{color:var(--wine2);}
+
+.sidebar-contact-icon{
+  width:14px;height:14px;
+  flex-shrink:0;
+  opacity:0.6;
+}
+
+/* ── MOBILE NAV ────────────────────────────────────── */
+.mobile-bar{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;
+  height:56px;
+  background:var(--ink);
+  align-items:center;
+  justify-content:space-between;
+  padding:0 1.5rem;
+  z-index:200;
+}
+
+.mobile-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;
+  color:#F7F4EE;
+  font-weight:500;
+}
+
+.mobile-logo em{font-style:italic;color:var(--wine2);}
+
+.hamburger{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;gap:5px;padding:4px;
+}
+
+.hamburger span{
+  display:block;width:22px;height:1.5px;
+  background:rgba(247,244,238,0.7);
+  transition:all 0.3s;
+}
+
+.mobile-nav-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(28,26,23,0.92);
+  z-index:150;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1rem;
+}
+
+.mobile-nav-overlay.open{display:flex;}
+
+.mobile-nav-overlay a{
+  color:rgba(247,244,238,0.7);
+  text-decoration:none;
+  font-size:1.2rem;
+  font-family:'Cormorant Garamond',serif;
+  font-weight:400;
+  padding:0.4rem 0;
+  transition:color 0.2s;
+}
+
+.mobile-nav-overlay a:hover{color:#F7F4EE;}
+
+/* ── MAIN CONTENT ───────────────────────────────────── */
+.main{
+  margin-left:var(--nav-w);
+  min-height:100vh;
+}
+
+/* ── HERO ──────────────────────────────────────────── */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:5rem 5rem 5rem 5rem;
+  position:relative;
+  border-bottom:1px solid var(--border);
+}
+
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.68rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--wine);
+  margin-bottom:2rem;
+  display:flex;
+  align-items:center;
+  gap:0.8rem;
+}
+
+.hero-eyebrow::before{
+  content:'';
+  width:32px;height:1px;
+  background:var(--wine);
+}
+
+h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4rem,7vw,7rem);
+  font-weight:300;
+  line-height:1;
+  letter-spacing:-0.02em;
+  color:var(--ink);
+  margin-bottom:0.15em;
+}
+
+h1 em{
+  font-style:italic;
+  color:var(--wine);
+}
+
+.hero-role{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.1rem,2vw,1.45rem);
+  font-weight:300;
+  font-style:italic;
+  color:var(--ink3);
+  margin-bottom:3rem;
+  max-width:520px;
+}
+
+.hero-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.5rem;
+  margin-bottom:3.5rem;
+}
+
+.tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;
+  letter-spacing:0.07em;
+  padding:0.3rem 0.85rem;
+  border:1px solid var(--wine-bd);
+  background:var(--wine-bg);
+  color:var(--wine);
+  border-radius:1px;
+}
+
+.hero-cta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1rem;
+  align-items:center;
+}
+
+.btn-primary{
+  display:inline-flex;
+  align-items:center;
+  gap:0.6rem;
+  background:var(--wine);
+  color:#F7F4EE;
+  text-decoration:none;
+  font-size:0.8rem;
+  letter-spacing:0.06em;
+  padding:0.8rem 1.8rem;
+  border-radius:1px;
+  font-family:'JetBrains Mono',monospace;
+  transition:background 0.2s,transform 0.15s;
+  border:none;cursor:pointer;
+}
+
+.btn-primary:hover{background:var(--wine2);transform:translateY(-1px);}
+
+.btn-secondary{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  color:var(--ink2);
+  text-decoration:none;
+  font-size:0.8rem;
+  letter-spacing:0.06em;
+  padding:0.8rem 1.8rem;
+  border:1px solid var(--border2);
+  border-radius:1px;
+  font-family:'JetBrains Mono',monospace;
+  transition:border-color 0.2s,color 0.2s,transform 0.15s;
+  background:none;cursor:pointer;
+}
+
+.btn-secondary:hover{border-color:var(--wine);color:var(--wine);transform:translateY(-1px);}
+
+/* Decorative corner mark */
+.hero-corner{
+  position:absolute;
+  bottom:3rem;right:5rem;
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.78rem;
+  font-style:italic;
+  color:var(--ink3);
+  opacity:0.5;
+  text-align:right;
+  line-height:1.5;
+}
+
+/* Stats strip */
+.stats-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid var(--border);
+}
+
+.stat-cell{
+  padding:2.5rem 3rem 2.5rem 5rem;
+  border-right:1px solid var(--border);
+}
+
+.stat-cell:last-child{border-right:none;}
+
+.stat-n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.8rem;
+  font-weight:300;
+  color:var(--ink);
+  line-height:1;
+  margin-bottom:0.3rem;
+}
+
+.stat-n sup{
+  font-size:1.2rem;
+  color:var(--wine);
+  vertical-align:super;
+}
+
+.stat-l{
+  font-size:0.75rem;
+  color:var(--ink3);
+  line-height:1.4;
+}
+
+/* ── SECTION COMMON ─────────────────────────────────── */
+section{
+  padding:5rem 5rem;
+  border-bottom:1px solid var(--border);
+}
+
+.sec-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--wine);
+  margin-bottom:1.5rem;
+  display:flex;
+  align-items:center;
+  gap:0.8rem;
+}
+
+.sec-label::before{
+  content:'';
+  width:24px;height:1px;
+  background:var(--wine);
+}
+
+h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:300;
+  color:var(--ink);
+  line-height:1.15;
+  margin-bottom:2.5rem;
+}
+
+h2 em{font-style:italic;color:var(--wine);}
+
+/* ── ABOUT ──────────────────────────────────────────── */
+.about-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:5rem;
+  align-items:start;
+}
+
+.about-body{
+  font-size:1rem;
+  color:var(--ink2);
+  line-height:1.9;
+}
+
+.about-body p+p{margin-top:1.2rem;}
+
+.hl{color:var(--wine);font-weight:400;}
+
+.about-aside{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.aside-item{
+  padding:1.2rem 0;
+  border-bottom:1px solid var(--border);
+}
+
+.aside-item:first-child{border-top:1px solid var(--border);}
+
+.aside-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:0.3rem;
+}
+
+.aside-value{
+  font-size:0.88rem;
+  color:var(--ink);
+  font-weight:400;
+}
+
+/* ── SKILLS ─────────────────────────────────────────── */
+.skills-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.7rem;
+}
+
+.skill-row{display:flex;flex-direction:column;gap:0.4rem;}
+
+.skill-head{
+  display:flex;
+  justify-content:space-between;
+  font-size:0.8rem;
+  color:var(--ink2);
+}
+
+.skill-pct{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;
+  color:var(--wine);
+}
+
+.skill-track{
+  height:2px;
+  background:var(--cream3);
+  border-radius:1px;
+  overflow:hidden;
+}
+
+.skill-fill{
+  height:100%;
+  background:var(--wine);
+  width:0;
+  transition:width 1.4s var(--ease);
+}
+
+/* ── EXPERIENCE ─────────────────────────────────────── */
+.exp-item{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:3rem;
+  padding:3rem 0;
+  border-bottom:1px solid var(--border);
+  transition:background 0.2s;
+}
+
+.exp-item:first-child{border-top:1px solid var(--border);}
+
+.exp-left{}
+
+.exp-date{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;
+  color:var(--wine);
+  letter-spacing:0.05em;
+  margin-bottom:0.4rem;
+}
+
+.exp-org{
+  font-size:0.82rem;
+  color:var(--ink3);
+  line-height:1.4;
+}
+
+.exp-loc{
+  font-size:0.75rem;
+  color:var(--ink3);
+  margin-top:0.3rem;
+  font-style:italic;
+}
+
+.exp-role{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;
+  font-weight:400;
+  color:var(--ink);
+  margin-bottom:0.8rem;
+}
+
+.exp-body{
+  font-size:0.88rem;
+  color:var(--ink2);
+  line-height:1.8;
+  margin-bottom:0.8rem;
+}
+
+.exp-bullets{
+  display:flex;
+  flex-direction:column;
+  gap:0.4rem;
+  margin-bottom:1rem;
+}
+
+.exp-bullet{
+  font-size:0.84rem;
+  color:var(--ink2);
+  padding-left:1.1rem;
+  position:relative;
+  line-height:1.6;
+}
+
+.exp-bullet::before{
+  content:'';
+  position:absolute;
+  left:0;top:0.65em;
+  width:5px;height:1px;
+  background:var(--wine);
+}
+
+.exp-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem;}
+
+.exp-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:0.06em;
+  color:var(--wine);
+  border:1px solid var(--wine-bd);
+  background:var(--wine-bg);
+  padding:0.18rem 0.6rem;
+  border-radius:1px;
+}
+
+.exp-feat{
+  display:inline-flex;
+  align-items:center;
+  gap:0.4rem;
+  font-size:0.65rem;
+  font-family:'JetBrains Mono',monospace;
+  background:var(--wine);
+  color:#F7F4EE;
+  padding:0.2rem 0.7rem;
+  letter-spacing:0.08em;
+  border-radius:1px;
+  margin-bottom:0.8rem;
+}
+
+/* ── EDUCATION ──────────────────────────────────────── */
+.edu-item{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:3rem;
+  padding:2.5rem 0;
+  border-bottom:1px solid var(--border);
+}
+
+.edu-item:first-child{border-top:1px solid var(--border);}
+
+.edu-year{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;
+  color:var(--wine);
+}
+
+.edu-deg{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;
+  font-weight:400;
+  color:var(--ink);
+  margin-bottom:0.3rem;
+}
+
+.edu-school{font-size:0.85rem;color:var(--ink2);margin-bottom:0.3rem;}
+.edu-note{font-size:0.75rem;color:var(--ink3);font-style:italic;}
+
+/* ── LANGUAGES ──────────────────────────────────────── */
+.lang-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+  border:1px solid var(--border);
+}
+
+.lang-cell{
+  padding:2.5rem 2rem;
+  background:var(--cream);
+  text-align:center;
+  border-right:1px solid var(--border);
+  transition:background 0.2s;
+}
+
+.lang-cell:last-child{border-right:none;}
+.lang-cell:hover{background:var(--cream2);}
+
+.lang-glyph{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3rem;
+  font-weight:300;
+  color:var(--wine);
+  line-height:1;
+  margin-bottom:0.8rem;
+}
+
+.lang-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem;
+  font-weight:400;
+  color:var(--ink);
+  margin-bottom:0.25rem;
+}
+
+.lang-level{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--wine);
+  margin-bottom:1.2rem;
+}
+
+.lang-dots{display:flex;justify-content:center;gap:5px;}
+
+.ld{
+  width:7px;height:7px;
+  border-radius:50%;
+  border:1px solid var(--wine);
+  background:transparent;
+}
+
+.ld.on{background:var(--wine);}
+
+/* ── CERTIFICATIONS ──────────────────────────────────── */
+.cert-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1px;
+  border:1px solid var(--border);
+  background:var(--border);
+}
+
+.cert-cell{
+  background:var(--cream);
+  padding:1.8rem 2rem;
+  transition:background 0.2s;
+}
+
+.cert-cell:hover{background:var(--cream2);}
+
+.cert-issuer{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--wine);
+  margin-bottom:0.5rem;
+}
+
+.cert-name{
+  font-size:0.88rem;
+  color:var(--ink);
+  font-weight:400;
+  line-height:1.4;
+}
+
+.cert-year{
+  font-size:0.72rem;
+  color:var(--ink3);
+  margin-top:0.3rem;
+}
+
+/* ── RESEARCH ────────────────────────────────────────── */
+.research-body{
+  font-size:1rem;
+  color:var(--ink2);
+  line-height:1.9;
+  max-width:680px;
+  margin-bottom:2.5rem;
+}
+
+.topic-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1px;
+  border:1px solid var(--border);
+  background:var(--border);
+}
+
+.topic-cell{
+  background:var(--cream);
+  padding:1.5rem;
+  transition:background 0.2s;
+}
+
+.topic-cell:hover{background:var(--cream2);}
+
+.topic-n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;
+  font-weight:300;
+  color:var(--cream3);
+  margin-bottom:0.5rem;
+}
+
+.topic-text{
+  font-size:0.85rem;
+  color:var(--ink2);
+  line-height:1.4;
+}
+
+/* ── CONTACT ─────────────────────────────────────────── */
+.contact-intro{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.4rem,2.5vw,2rem);
+  font-weight:300;
+  font-style:italic;
+  color:var(--ink2);
+  max-width:560px;
+  margin-bottom:3rem;
+  line-height:1.5;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-bottom:3rem;
+}
+
+.contact-cell{
+  background:var(--cream);
+  padding:1.8rem 2rem;
+  text-decoration:none;
+  transition:background 0.2s,color 0.2s;
+  display:block;
+}
+
+.contact-cell:hover{background:var(--ink);color:#F7F4EE;}
+.contact-cell:hover .cc-label{color:rgba(247,244,238,0.4);}
+.contact-cell:hover .cc-val{color:#F7F4EE;}
+.contact-cell:hover .cc-arrow{color:var(--wine2);}
+
+.cc-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:0.4rem;
+  transition:color 0.2s;
+}
+
+.cc-row{display:flex;align-items:center;justify-content:space-between;}
+
+.cc-val{
+  font-size:0.88rem;
+  color:var(--ink);
+  font-weight:400;
+  transition:color 0.2s;
+}
+
+.cc-arrow{
+  font-size:1rem;
+  color:var(--border2);
+  transition:color 0.2s;
+}
+
+/* ── FOOTER ─────────────────────────────────────────── */
+footer{
+  padding:2.5rem 5rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1rem;
+}
+
+.footer-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;
+  font-style:italic;
+  color:var(--ink3);
+}
+
+.footer-copy{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:0.1em;
+  color:var(--ink3);
+}
+
+/* ── SCROLL REVEAL ──────────────────────────────────── */
+.reveal{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.reveal.in{opacity:1;transform:none;}
+
+/* stagger children */
+.stagger > *{
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+
+.stagger.in > *:nth-child(1){opacity:1;transform:none;transition-delay:0s;}
+.stagger.in > *:nth-child(2){opacity:1;transform:none;transition-delay:0.07s;}
+.stagger.in > *:nth-child(3){opacity:1;transform:none;transition-delay:0.14s;}
+.stagger.in > *:nth-child(4){opacity:1;transform:none;transition-delay:0.21s;}
+.stagger.in > *:nth-child(5){opacity:1;transform:none;transition-delay:0.28s;}
+.stagger.in > *:nth-child(6){opacity:1;transform:none;transition-delay:0.35s;}
+.stagger.in > *:nth-child(n+7){opacity:1;transform:none;transition-delay:0.42s;}
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media(max-width:900px){
+  :root{--nav-w:0px;}
+  .sidebar{transform:translateX(-260px);}
+  .sidebar.open{transform:translateX(0);}
+  .mobile-bar{display:flex;}
+  .main{margin-left:0;padding-top:56px;}
+  .hero{padding:4rem 2rem;}
+  section{padding:4rem 2rem;}
+  .stats-strip{grid-template-columns:repeat(2,1fr);}
+  .stat-cell{padding:2rem 2rem;}
+  .about-grid{grid-template-columns:1fr;gap:3rem;}
+  .skills-grid{grid-template-columns:1fr;}
+  .exp-item,.edu-item{grid-template-columns:1fr;gap:0.5rem;}
+  .exp-left,.edu-year{margin-bottom:0.5rem;}
+  .lang-grid{grid-template-columns:1fr;border:none;gap:1px;}
+  .lang-cell{border-right:none;border-bottom:1px solid var(--border);}
+  .cert-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  footer{padding:2rem;}
+  .hero-corner{display:none;}
+}
+
+@media(max-width:560px){
+  h1{font-size:3.2rem;}
+  .stats-strip{grid-template-columns:1fr 1fr;}
+  .stat-cell{padding:1.5rem 1.5rem;}
+}
 </style>
 </head>
 <body>
 
-<div class="top-rule"></div>
+<!-- SIDEBAR NAV -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">Wai <em>Yan</em> Lin</div>
+  <div class="sidebar-sub">Portfolio · 2025</div>
 
-<!-- HERO -->
-<div class="hero">
-  <div>
-    <p class="label">Portfolio · Kobe, Japan · 2025</p>
-    <h1>Wai <em>Yan</em> Lin</h1>
-    <p class="hero-title">International Development &nbsp;·&nbsp; Education Economics &nbsp;·&nbsp; Digital Transformation</p>
-    <div class="pill-row">
-      <span class="pill">MEXT Scholar 2025</span>
-      <span class="pill">Kobe University GSICS</span>
-      <span class="pill">World Bank Intern</span>
-      <span class="pill">MBA · Heriot-Watt</span>
-      <span class="pill">JCES Member</span>
-      <span class="pill">USAID DISP Scholar</span>
-    </div>
+  <div class="nav-section">Overview</div>
+  <nav>
+    <a href="#home" onclick="closeSidebar()">Home</a>
+    <a href="#about" onclick="closeSidebar()">About</a>
+    <a href="#research" onclick="closeSidebar()">Research</a>
+  </nav>
+
+  <div class="nav-section">Career</div>
+  <nav>
+    <a href="#experience" onclick="closeSidebar()">Experience</a>
+    <a href="#education" onclick="closeSidebar()">Education</a>
+  </nav>
+
+  <div class="nav-section">Profile</div>
+  <nav>
+    <a href="#languages" onclick="closeSidebar()">Languages</a>
+    <a href="#certifications" onclick="closeSidebar()">Credentials</a>
+    <a href="#contact" onclick="closeSidebar()">Contact</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a class="sidebar-contact-link" href="mailto:wylynnl@gmail.com">
+      <svg class="sidebar-contact-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="1" y="3" width="14" height="10" rx="1"/><path d="M1 4l7 5 7-5"/>
+      </svg>
+      wylynnl@gmail.com
+    </a>
+    <a class="sidebar-contact-link" href="https://www.linkedin.com/in/wai-yan-lin-r2y4u96/" target="_blank">
+      <svg class="sidebar-contact-icon" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M2.5 1A1.5 1.5 0 1 0 2.5 4 1.5 1.5 0 0 0 2.5 1zM1 5.5h3V15H1zM6 5.5h2.9v1.3h.04C9.36 5.9 10.5 5.3 12 5.3c3.2 0 3.8 2.1 3.8 4.8V15H13v-4.3c0-1.1 0-2.6-1.6-2.6-1.6 0-1.85 1.2-1.85 2.5V15H6z"/>
+      </svg>
+      LinkedIn
+    </a>
+    <a class="sidebar-contact-link" href="https://gsics-ogawa.com/archives/student/wai-yan-lin" target="_blank">
+      <svg class="sidebar-contact-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M1 6l7-4 7 4v9H1z"/><rect x="5" y="9" width="3" height="6"/>
+      </svg>
+      Kobe University
+    </a>
   </div>
-  <div class="hero-badge-col">
-    <div class="status-card">
-      <div class="avatar-ring">WYL</div>
-      <div class="status-name">Wai Yan Lin</div>
-      <div class="status-role">M.Econ Student<br>GSICS, Kobe University</div>
-      <div class="status-badge"><span class="status-dot"></span>Open to opportunities</div>
-      <div class="status-meta">📍 Kobe-shi, Hyogo, Japan</div>
-      <div class="status-meta" style="margin-top:0.3rem">📧 wylynnl@gmail.com</div>
-    </div>
-  </div>
+</aside>
+
+<!-- MOBILE BAR -->
+<div class="mobile-bar">
+  <span class="mobile-logo">Wai <em>Yan</em> Lin</span>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
 </div>
 
-<!-- KEY STATS -->
-<div class="wrap" style="padding-top:0;padding-bottom:3rem;">
-  <div class="stats-row reveal">
-    <div class="stat-card">
-      <div class="stat-num">500<span>+</span></div>
-      <div class="stat-desc">Students counselled & placed internationally</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">233<span>%</span></div>
-      <div class="stat-desc">Revenue growth at A-Link in 3 years</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">7<span>+</span></div>
-      <div class="stat-desc">Years in international education partnerships</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">3</div>
-      <div class="stat-desc">Languages fluent — EN · ZH · MY</div>
-    </div>
-  </div>
+<!-- MOBILE OVERLAY NAV -->
+<div class="mobile-nav-overlay" id="mobileNav">
+  <a href="#home" onclick="closeMobileNav()">Home</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#research" onclick="closeMobileNav()">Research</a>
+  <a href="#experience" onclick="closeMobileNav()">Experience</a>
+  <a href="#education" onclick="closeMobileNav()">Education</a>
+  <a href="#languages" onclick="closeMobileNav()">Languages</a>
+  <a href="#certifications" onclick="closeMobileNav()">Credentials</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
 </div>
 
-<div class="rule"></div>
+<!-- MAIN -->
+<main class="main">
 
-<!-- ABOUT + SKILL BARS -->
-<div class="wrap reveal">
-  <p class="label">01 · About</p>
-  <h2>Bridging Education &amp; Development Policy</h2>
-  <div class="about-cols">
-    <div class="about-body">
-      <p>I am a <span class="hl">MEXT 2025 Scholar</span> pursuing a Master of Economics at Kobe University's Graduate School of International Cooperation Studies (GSICS), studying digital literacy, education economics, and development policy in the ASEAN region under Professor Keiichi Ogawa.</p>
-      <p>With an MBA from <span class="hl">Heriot-Watt University</span> and seven-plus years leading international educational partnerships across Myanmar, Thailand, the UK, and the USA, I bring a rare combination of field-tested management experience and rigorous academic inquiry.</p>
-      <p>A recent internship at the <span class="hl">World Bank</span> (Republic of Congo, 2026) and membership in the Japan Comparative Education Society anchor my commitment to evidence-based development policy.</p>
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <p class="hero-eyebrow">Kobe, Japan · MEXT Scholar 2025</p>
+    <h1>Wai <em>Yan</em><br>Lin</h1>
+    <p class="hero-role">International Development · Education Economics · Digital Transformation</p>
+    <div class="hero-tags stagger">
+      <span class="tag">MEXT Scholar 2025</span>
+      <span class="tag">Kobe University GSICS</span>
+      <span class="tag">World Bank Intern '26</span>
+      <span class="tag">MBA · Heriot-Watt</span>
+      <span class="tag">JCES Member</span>
+      <span class="tag">USAID DISP Scholar</span>
+      <span class="tag">Trilingual</span>
     </div>
-    <div class="skills-visual">
-      <div class="skill-row">
-        <div class="skill-header"><span>International Partnerships</span><span class="skill-pct">95%</span></div>
-        <div class="skill-track"><div class="skill-fill" data-w="95"></div></div>
-      </div>
-      <div class="skill-row">
-        <div class="skill-header"><span>Stakeholder Communication</span><span class="skill-pct">92%</span></div>
-        <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
-      </div>
-      <div class="skill-row">
-        <div class="skill-header"><span>Education Policy & Research</span><span class="skill-pct">85%</span></div>
-        <div class="skill-track"><div class="skill-fill" data-w="85"></div></div>
-      </div>
-      <div class="skill-row">
-        <div class="skill-header"><span>Data Analysis (STATA / Tableau)</span><span class="skill-pct">75%</span></div>
-        <div class="skill-track"><div class="skill-fill" data-w="75"></div></div>
-      </div>
-      <div class="skill-row">
-        <div class="skill-header"><span>Grant & Report Writing</span><span class="skill-pct">88%</span></div>
-        <div class="skill-track"><div class="skill-fill" data-w="88"></div></div>
-      </div>
-      <div class="skill-row">
-        <div class="skill-header"><span>Digital Transformation Strategy</span><span class="skill-pct">78%</span></div>
-        <div class="skill-track"><div class="skill-fill" data-w="78"></div></div>
-      </div>
+    <div class="hero-cta">
+      <a class="btn-primary" href="mailto:wylynnl@gmail.com">
+        Get in touch
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M1 6h10M7 2l4 4-4 4"/>
+        </svg>
+      </a>
+      <a class="btn-secondary" href="https://www.linkedin.com/in/wai-yan-lin-r2y4u96/" target="_blank">
+        View LinkedIn
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 2H2v8h8V7M7 1h4v4M10 2L6 6" stroke-linecap="round"/>
+        </svg>
+      </a>
     </div>
-  </div>
-</div>
+    <div class="hero-corner">
+      Kobe University · GSICS<br>
+      Prof. Keiichi Ogawa Seminar<br>
+      Expected Sept. 2027
+    </div>
+  </section>
 
-<div class="rule"></div>
-
-<!-- CHARTS / INFOGRAPHICS -->
-<div class="wrap reveal">
-  <p class="label">02 · Infographics</p>
-  <h2>Career at a Glance</h2>
-  <div class="charts-grid">
-    <div class="chart-card">
-      <div class="chart-title">Experience by role (years)</div>
-      <div style="position:relative;height:200px;">
-        <canvas id="barChart" role="img" aria-label="Bar chart of years in each career role">Experience: Partnerships Manager 3.1yr, Liaison Officer 3.8yr, Interpreter 4yr, World Bank 0.2yr, Kobe Univ 2yr</canvas>
-      </div>
+  <!-- STATS STRIP -->
+  <div class="stats-strip stagger reveal">
+    <div class="stat-cell">
+      <div class="stat-n">500<sup>+</sup></div>
+      <div class="stat-l">Students counselled &amp; placed internationally</div>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Core competency profile</div>
-      <div style="position:relative;height:200px;">
-        <canvas id="radarChart" role="img" aria-label="Radar chart of core competencies across 6 dimensions">Partnerships 95, Research 82, Languages 92, Analytics 75, Communication 91, Policy 80</canvas>
-      </div>
+    <div class="stat-cell">
+      <div class="stat-n">233<sup>%</sup></div>
+      <div class="stat-l">Revenue growth at A-Link Consultancy in 3 years</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-n">7<sup>+</sup></div>
+      <div class="stat-l">Years in international education partnerships</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-n">3</div>
+      <div class="stat-l">Fluent languages — English, Mandarin, Burmese</div>
     </div>
   </div>
 
-  <div class="chart-card" style="margin-top:2rem;">
-    <div class="chart-title">University partnership footprint</div>
-    <div style="display:flex;flex-wrap:wrap;gap:2rem;margin-top:0.5rem;align-items:center;">
-      <div style="flex:0 0 180px;">
-        <div style="position:relative;height:180px;width:180px;">
-          <canvas id="donutChart" role="img" aria-label="Donut chart: UK 4, ASEAN 3, USA 2, partnerships">UK 4, ASEAN 3, USA 2, Japan 1</canvas>
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="sec-label">About</p>
+    <h2>Bridging education &amp;<br><em>development policy</em></h2>
+    <div class="about-grid reveal">
+      <div>
+        <div class="about-body">
+          <p>I am a <span class="hl">MEXT 2025 Scholar</span> pursuing a Master of Economics at Kobe University's Graduate School of International Cooperation Studies (GSICS), studying digital literacy, education economics, and development policy in the ASEAN region under Professor Keiichi Ogawa.</p>
+          <p>With an MBA from <span class="hl">Heriot-Watt University</span> and over seven years leading international educational partnerships across Myanmar, Thailand, the UK, and the USA, I bring a rare combination of field-tested management experience and rigorous academic inquiry.</p>
+          <p>A recent internship at the <span class="hl">World Bank</span> (Republic of Congo, 2026) and active membership in the Japan Comparative Education Society reinforce my commitment to evidence-based development policy. I am eager to contribute to international organisations and institutions at the intersection of education, technology, and sustainable development.</p>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:0.8rem;justify-content:center;">
-          <span style="display:flex;align-items:center;gap:4px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;"><span style="width:8px;height:8px;border-radius:2px;background:#c0392b;display:inline-block;"></span>UK</span>
-          <span style="display:flex;align-items:center;gap:4px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;"><span style="width:8px;height:8px;border-radius:2px;background:#e05c4e;display:inline-block;"></span>ASEAN</span>
-          <span style="display:flex;align-items:center;gap:4px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;"><span style="width:8px;height:8px;border-radius:2px;background:rgba(192,57,43,0.5);display:inline-block;"></span>USA</span>
+
+        <div class="skills-grid" style="margin-top:3rem;" id="skillGrid">
+          <div class="skill-row">
+            <div class="skill-head"><span>International Partnerships</span><span class="skill-pct">95%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="95"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-head"><span>Education Policy & Research</span><span class="skill-pct">85%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="85"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-head"><span>Stakeholder Communication</span><span class="skill-pct">92%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-head"><span>Data Analysis (STATA / Tableau)</span><span class="skill-pct">75%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="75"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-head"><span>Grant & Report Writing</span><span class="skill-pct">88%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="88"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-head"><span>Digital Transformation Strategy</span><span class="skill-pct">78%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="78"></div></div>
+          </div>
         </div>
       </div>
-      <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:0.6rem;">
-        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
-          <span style="font-size:1rem;flex-shrink:0;">🇬🇧</span>
-          <span style="font-size:0.82rem;color:var(--text);">Wolverhampton · Oxford Brookes · Liverpool JMU · Heriot-Watt</span>
+
+      <div class="about-aside">
+        <div class="aside-item">
+          <div class="aside-label">Currently based</div>
+          <div class="aside-value">Kobe-shi, Hyogo, Japan</div>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
-          <span style="font-size:1rem;flex-shrink:0;">🇹🇭</span>
-          <span style="font-size:0.82rem;color:var(--text);">KMUTT — King Mongkut's University of Technology Thonburi</span>
+        <div class="aside-item">
+          <div class="aside-label">Current role</div>
+          <div class="aside-value">M.Econ Student · GSICS, Kobe University</div>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
-          <span style="font-size:1rem;flex-shrink:0;">🇺🇸</span>
-          <span style="font-size:0.82rem;color:var(--text);">Rochester Institute of Technology · University of Arizona (USAID)</span>
+        <div class="aside-item">
+          <div class="aside-label">Status</div>
+          <div class="aside-value" style="color:var(--wine);font-weight:400;">Open to opportunities</div>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:0.8rem;padding:0.6rem;background:var(--surface2);border-radius:4px;">
-          <span style="font-size:1rem;flex-shrink:0;">🇲🇾</span>
-          <span style="font-size:0.82rem;color:var(--text);">University of Nottingham Malaysia — International Summer School</span>
+        <div class="aside-item">
+          <div class="aside-label">Research supervisor</div>
+          <div class="aside-value">Prof. Keiichi Ogawa</div>
         </div>
-       </div>
+        <div class="aside-item">
+          <div class="aside-label">Scholarship</div>
+          <div class="aside-value">MEXT 2025 (Japan MEXT)</div>
+        </div>
+        <div class="aside-item">
+          <div class="aside-label">Academic society</div>
+          <div class="aside-value">Japan Comparative Education Society (JCES)</div>
+        </div>
+        <div class="aside-item">
+          <div class="aside-label">Expected graduation</div>
+          <div class="aside-value">September 2027</div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="rule"></div>
-
-<!-- RESEARCH -->
-<div class="wrap reveal">
-  <p class="label">03 · Research</p>
-  <h2>Areas of Focus</h2>
-  <p style="font-size:0.95rem;color:var(--text);line-height:1.85;max-width:640px;">Research at the intersection of education economics, technology policy, and international development — with a focus on Southeast Asia and ASEAN. Particularly interested in how digital literacy initiatives and EdTech interventions drive human capital development in emerging economies.</p>
-  <div class="r-tags">
-    <span class="r-tag">Digital Literacy</span>
-    <span class="r-tag">Education Economics</span>
-    <span class="r-tag">EdTech & Digital Transformation</span>
-    <span class="r-tag">Development Policy</span>
-    <span class="r-tag">Transnational Education</span>
-    <span class="r-tag">International Collaboration</span>
-    <span class="r-tag">ASEAN Human Capital</span>
-  </div>
-</div>
-
-<div class="rule"></div>
-
-<!-- EXPERIENCE -->
-<div class="wrap reveal">
-  <p class="label">04 · Experience</p>
-  <h2>Professional Journey</h2>
-  <div class="timeline">
-    <div class="tl-item featured reveal">
-      <div class="tl-meta">
-        <span class="tl-date">Feb – Mar 2026</span>
-        <span class="tl-org">World Bank · Republic of Congo (Online)</span>
+  <!-- RESEARCH -->
+  <section id="research">
+    <p class="sec-label">Research</p>
+    <h2>Areas of <em>focus</em></h2>
+    <p class="research-body reveal">My research sits at the intersection of education economics, technology policy, and international development — with a particular focus on Southeast Asia and the ASEAN region. I am drawn to questions of how digital literacy initiatives and EdTech interventions can drive equitable human capital development in emerging and transitional economies.</p>
+    <div class="topic-grid stagger reveal">
+      <div class="topic-cell">
+        <div class="topic-n">01</div>
+        <div class="topic-text">Digital Literacy &amp; EdTech Policy</div>
       </div>
-      <div class="tl-role">Intern</div>
-      <div class="tl-body">Contributed to World Bank operations — engaging with international development frameworks and policy analysis at a global institutional level.</div>
-      <div><span class="tl-tag">Global Development</span><span class="tl-tag">Policy Analysis</span></div>
+      <div class="topic-cell">
+        <div class="topic-n">02</div>
+        <div class="topic-text">Education Economics &amp; Human Capital</div>
+      </div>
+      <div class="topic-cell">
+        <div class="topic-n">03</div>
+        <div class="topic-text">Transnational Education &amp; Partnerships</div>
+      </div>
+      <div class="topic-cell">
+        <div class="topic-n">04</div>
+        <div class="topic-text">Development Policy &amp; International Aid</div>
+      </div>
+      <div class="topic-cell">
+        <div class="topic-n">05</div>
+        <div class="topic-text">ASEAN Regional Cooperation</div>
+      </div>
+      <div class="topic-cell">
+        <div class="topic-n">06</div>
+        <div class="topic-text">Digital Transformation in Emerging Economies</div>
+      </div>
     </div>
-    <div class="tl-item featured reveal">
-      <div class="tl-meta">
-        <span class="tl-date">Jan 2022 – Feb 2025</span>
-        <span class="tl-org">Strategy First Education Group · Yangon, Myanmar</span>
-      </div>
-      <div class="tl-role">International Partnerships Manager</div>
-      <div class="tl-body">Founded and scaled A-Link Education Consultancy — building a team and infrastructure serving 500+ students, growing revenue by 233% in three years.</div>
-      <div class="tl-bullets">
-        <span class="tl-bullet">Managed partnerships with KMUTT (Thailand), RIT (USA), University of Wolverhampton (UK)</span>
-        <span class="tl-bullet">Led 50-person delegation to University of Nottingham International Summer School, Malaysia</span>
-        <span class="tl-bullet">Established British Council IELTS Test Centre in Mandalay as certified Test Site Administrator</span>
-        <span class="tl-bullet">Drafted reports for JICA, USAID, and American Centre Yangon funded projects</span>
-      </div>
-      <div><span class="tl-tag">Education Partnerships</span><span class="tl-tag">Business Development</span><span class="tl-tag">JICA · USAID</span></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-meta">
-        <span class="tl-date">Feb 2018 – Dec 2021</span>
-        <span class="tl-org">Strategy First Education Group · Yangon, Myanmar</span>
-      </div>
-      <div class="tl-role">Liaison Officer</div>
-      <div class="tl-body">Primary liaison between international education partners and internal university departments; supported Corporate Affairs Director in strategic operations.</div>
-      <div class="tl-bullets">
-        <span class="tl-bullet">Validated partnerships with Oxford Brookes University and Liverpool John Moores University</span>
-        <span class="tl-bullet">Authored SOPs and policy documents aligning academic operations with international standards</span>
-      </div>
-      <div><span class="tl-tag">SOPs & Policy</span><span class="tl-tag">Corporate Affairs</span></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-meta">
-        <span class="tl-date">2013 – 2017</span>
-        <span class="tl-org">Freelance · Myanmar</span>
-      </div>
-      <div class="tl-role">Chinese–English–Burmese Interpreter</div>
-      <div class="tl-body">High-stakes interpretation for government ministries and diplomatic engagements — including a confidential mission to China for the Ministry of Defence and ministerial negotiations with Myanmar's Ministry of Construction.</div>
-      <div><span class="tl-tag">Government / Diplomatic</span><span class="tl-tag">Technical Interpretation</span></div>
-    </div>
-  </div>
-</div>
+  </section>
 
-<div class="rule"></div>
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <p class="sec-label">Experience</p>
+    <h2>Professional <em>journey</em></h2>
 
-<!-- EDUCATION -->
-<div class="wrap reveal">
-  <p class="label">05 · Education</p>
-  <h2>Academic Formation</h2>
-  <div class="edu-grid">
-    <div class="edu-card">
-      <div class="edu-year-col">2025<br>–<br>2027</div>
-      <div class="edu-content">
-        <div class="edu-degree">Master of Economics (Development Policy)</div>
+    <div class="exp-item reveal">
+      <div class="exp-left">
+        <div class="exp-date">Feb – Mar 2026</div>
+        <div class="exp-org">World Bank</div>
+        <div class="exp-loc">Republic of Congo (Remote)</div>
+      </div>
+      <div>
+        <div class="exp-feat">Featured</div>
+        <div class="exp-role">Intern</div>
+        <div class="exp-body">Contributed to World Bank operations, engaging with international development frameworks and policy analysis at a global institutional level.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Global Development</span>
+          <span class="exp-tag">Policy Analysis</span>
+          <span class="exp-tag">World Bank Group</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-left">
+        <div class="exp-date">Jan 2022 – Feb 2025</div>
+        <div class="exp-org">Strategy First Education Group Limited</div>
+        <div class="exp-loc">Yangon, Myanmar</div>
+      </div>
+      <div>
+        <div class="exp-feat">Featured</div>
+        <div class="exp-role">International Partnerships Manager</div>
+        <div class="exp-body">Founded and scaled A-Link Education Consultancy — building a team and full operational infrastructure serving 500+ students, and growing revenue by 233% within three years of founding.</div>
+        <div class="exp-bullets">
+          <span class="exp-bullet">Managed new partnerships with KMUTT (Thailand), Rochester Institute of Technology (USA), and University of Wolverhampton (UK)</span>
+          <span class="exp-bullet">Led a 50-person delegation to University of Nottingham International Summer School, Malaysia</span>
+          <span class="exp-bullet">Established British Council IELTS Test Centre in Mandalay; qualified as certified Test Site Administrator</span>
+          <span class="exp-bullet">Drafted and managed project reports for JICA, USAID, and American Centre Yangon</span>
+          <span class="exp-bullet">Executed strategic cross-SBU initiatives instructed by the President and Vice Presidents</span>
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag">Education Partnerships</span>
+          <span class="exp-tag">Business Development</span>
+          <span class="exp-tag">JICA · USAID</span>
+          <span class="exp-tag">British Council</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-left">
+        <div class="exp-date">Feb 2018 – Dec 2021</div>
+        <div class="exp-org">Strategy First Education Group Limited</div>
+        <div class="exp-loc">Yangon, Myanmar</div>
+      </div>
+      <div>
+        <div class="exp-role">Liaison Officer</div>
+        <div class="exp-body">Primary liaison between international education partners and internal university departments, supporting the Corporate Affairs Director in strategic and administrative operations.</div>
+        <div class="exp-bullets">
+          <span class="exp-bullet">Coordinated partnership validation with Oxford Brookes University and Liverpool John Moores University</span>
+          <span class="exp-bullet">Authored SOPs and policy documents aligning academic operations with international standards</span>
+          <span class="exp-bullet">Delivered cross-SBU strategic tasks instructed directly by senior leadership</span>
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag">SOPs & Policy</span>
+          <span class="exp-tag">Corporate Affairs</span>
+          <span class="exp-tag">University Liaising</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-left">
+        <div class="exp-date">Oct – Nov 2016</div>
+        <div class="exp-org">TODAY Ogilvy</div>
+        <div class="exp-loc">Yangon, Myanmar</div>
+      </div>
+      <div>
+        <div class="exp-role">Internship</div>
+        <div class="exp-body">Supported client relations and social media campaign execution for major accounts including Coca-Cola, Max Myanmar, and VIVO Myanmar. Assisted in KV production and coordinated with KOLs for client projects.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Marketing</span>
+          <span class="exp-tag">Social Media</span>
+          <span class="exp-tag">Client Relations</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-left">
+        <div class="exp-date">2013 – 2017</div>
+        <div class="exp-org">Freelance</div>
+        <div class="exp-loc">Myanmar</div>
+      </div>
+      <div>
+        <div class="exp-role">Chinese–English–Burmese Interpreter</div>
+        <div class="exp-body">Delivered high-stakes interpretation for government ministries, infrastructure projects, and diplomatic engagements across Myanmar and China.</div>
+        <div class="exp-bullets">
+          <span class="exp-bullet">Confidential one-week mission to China for the Myanmar Ministry of Defence (2016)</span>
+          <span class="exp-bullet">Interpreted ministerial negotiations between company representatives and the Minister of Construction, Nay Pyi Taw (2017)</span>
+          <span class="exp-bullet">Facilitated Chinese Expert Engineers and Myanmar Ministry of Construction for major bridge renovation in Rakhine (2015)</span>
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag">Government / Diplomatic</span>
+          <span class="exp-tag">Technical Interpretation</span>
+          <span class="exp-tag">ZH · EN · MY</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <p class="sec-label">Education</p>
+    <h2>Academic <em>formation</em></h2>
+
+    <div class="edu-item reveal">
+      <div>
+        <div class="edu-year">2025 – 2027 (Expected)</div>
+      </div>
+      <div>
+        <div class="exp-feat">Current · MEXT Scholarship</div>
+        <div class="edu-deg">Master of Economics (Development Policy)</div>
         <div class="edu-school">Graduate School of International Cooperation Studies (GSICS) · Kobe University, Japan</div>
-        <div class="edu-note">MEXT 2025 Scholarship · Ogawa Seminar · JCES Member</div>
+        <div class="edu-note">MEXT 2025 Scholarship · Prof. Keiichi Ogawa Seminar · Japan Comparative Education Society Member</div>
       </div>
     </div>
-    <div class="edu-card">
-      <div class="edu-year-col">2019<br>–<br>2021</div>
-      <div class="edu-content">
-        <div class="edu-degree">Master of Business Administration (MBA)</div>
-        <div class="edu-school">Edinburgh Business School · Heriot-Watt University, UK</div>
-        <div class="edu-note">Employment Scholarship · Conferred October 31, 2021</div>
+
+    <div class="edu-item reveal">
+      <div>
+        <div class="edu-year">2019 – 2021</div>
+      </div>
+      <div>
+        <div class="edu-deg">Master of Business Administration (MBA)</div>
+        <div class="edu-school">Edinburgh Business School · Heriot-Watt University, Edinburgh, UK</div>
+        <div class="edu-note">Employment Scholarship from Strategy First Education Group · Conferred 31 October 2021</div>
       </div>
     </div>
-    <div class="edu-card">
-      <div class="edu-year-col">2014<br>–<br>2017</div>
-      <div class="edu-content">
-        <div class="edu-degree">B.A. English for Professional Purposes</div>
+
+    <div class="edu-item reveal">
+      <div>
+        <div class="edu-year">2014 – 2017</div>
+      </div>
+      <div>
+        <div class="edu-deg">Bachelor of Arts — English for Professional Purposes</div>
         <div class="edu-school">University of Yangon / National Management Degree College, Myanmar</div>
-        <div class="edu-note">Graduated Dec 2017 · Reg. No. 239189</div>
+        <div class="edu-note">Graduated December 2017 · Registered Graduate No. 239189</div>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="rule"></div>
-
-<!-- LANGUAGES -->
-<div class="wrap reveal">
-  <p class="label">06 · Languages</p>
-  <h2>Multilingual Proficiency</h2>
-  <div class="lang-grid">
-    <div class="lang-card">
-      <div class="lang-script">A</div>
-      <div class="lang-name">English</div>
-      <div class="lang-level">Fluent</div>
-      <div class="lang-dots">
-        <span class="dot on"></span><span class="dot on"></span><span class="dot on"></span>
-        <span class="dot on"></span><span class="dot on"></span>
+  <!-- LANGUAGES -->
+  <section id="languages">
+    <p class="sec-label">Languages</p>
+    <h2>Multilingual <em>proficiency</em></h2>
+    <div class="lang-grid reveal">
+      <div class="lang-cell">
+        <div class="lang-glyph">A</div>
+        <div class="lang-name">English</div>
+        <div class="lang-level">Fluent</div>
+        <div class="lang-dots">
+          <span class="ld on"></span><span class="ld on"></span><span class="ld on"></span>
+          <span class="ld on"></span><span class="ld on"></span>
+        </div>
+      </div>
+      <div class="lang-cell">
+        <div class="lang-glyph">中</div>
+        <div class="lang-name">Mandarin Chinese</div>
+        <div class="lang-level">Fluent · HSK Level 5</div>
+        <div class="lang-dots">
+          <span class="ld on"></span><span class="ld on"></span><span class="ld on"></span>
+          <span class="ld on"></span><span class="ld"></span>
+        </div>
+      </div>
+      <div class="lang-cell">
+        <div class="lang-glyph">မ</div>
+        <div class="lang-name">Burmese</div>
+        <div class="lang-level">Native</div>
+        <div class="lang-dots">
+          <span class="ld on"></span><span class="ld on"></span><span class="ld on"></span>
+          <span class="ld on"></span><span class="ld on"></span>
+        </div>
       </div>
     </div>
-    <div class="lang-card">
-      <div class="lang-script">中</div>
-      <div class="lang-name">Mandarin</div>
-      <div class="lang-level">HSK Level 5 · Fluent</div>
-      <div class="lang-dots">
-        <span class="dot on"></span><span class="dot on"></span><span class="dot on"></span>
-        <span class="dot on"></span><span class="dot"></span>
-      </div>
-    </div>
-    <div class="lang-card">
-      <div class="lang-script">မ</div>
-      <div class="lang-name">Burmese</div>
-      <div class="lang-level">Native</div>
-      <div class="lang-dots">
-        <span class="dot on"></span><span class="dot on"></span><span class="dot on"></span>
-        <span class="dot on"></span><span class="dot on"></span>
-      </div>
-    </div>
-  </div>
-</div>
+  </section>
 
-<div class="rule"></div>
-
-<!-- CERTIFICATIONS -->
-<div class="wrap reveal">
-  <p class="label">07 · Credentials</p>
-  <h2>Certifications &amp; Awards</h2>
-  <div class="certs-grid">
-    <div class="cert-item">
-      <span class="cert-ico">🎓</span>
-      <div>
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <p class="sec-label">Credentials</p>
+    <h2>Certifications <em>&amp; awards</em></h2>
+    <div class="cert-grid stagger reveal">
+      <div class="cert-cell">
+        <div class="cert-issuer">University of Arizona · USAID DISP</div>
         <div class="cert-name">Certificate in Business Analytics Science</div>
-        <div class="cert-sub">University of Arizona · USAID DISP Scholar · 2024</div>
+        <div class="cert-year">2024</div>
+      </div>
+      <div class="cert-cell">
+        <div class="cert-issuer">British Council</div>
+        <div class="cert-name">UK Education Agent &amp; Counsellor Certification</div>
+        <div class="cert-year">2023 (valid 2 years)</div>
+      </div>
+      <div class="cert-cell">
+        <div class="cert-issuer">British Council</div>
+        <div class="cert-name">IELTS Test Centre Administration &amp; Exam Officer Training</div>
+        <div class="cert-year">2023</div>
+      </div>
+      <div class="cert-cell">
+        <div class="cert-issuer">University of Nottingham Malaysia</div>
+        <div class="cert-name">International Summer School — "Doing Business in Asia" · First Class (70/100)</div>
+        <div class="cert-year">2023</div>
+      </div>
+      <div class="cert-cell">
+        <div class="cert-issuer">Hanban / Confucius Institute Headquarters</div>
+        <div class="cert-name">HSK Level 5 Chinese Proficiency Test · Score 212/300</div>
+        <div class="cert-year">2010</div>
+      </div>
+      <div class="cert-cell">
+        <div class="cert-issuer">British Council Global L&amp;D</div>
+        <div class="cert-name">Mandatory Training Suite: Fraud Awareness · Child Protection · Safeguarding · EDI · IELTS Invigilation · Information Management</div>
+        <div class="cert-year">2023</div>
       </div>
     </div>
-    <div class="cert-item">
-      <span class="cert-ico">🇬🇧</span>
-      <div>
-        <div class="cert-name">UK Education Agent & Counsellor Certification</div>
-        <div class="cert-sub">British Council · 2023</div>
-      </div>
-    </div>
-    <div class="cert-item">
-      <span class="cert-ico">📋</span>
-      <div>
-        <div class="cert-name">IELTS Test Centre Administration & Exam Officer</div>
-        <div class="cert-sub">British Council · 2023</div>
-      </div>
-    </div>
-    <div class="cert-item">
-      <span class="cert-ico">🏫</span>
-      <div>
-        <div class="cert-name">Doing Business in Asia — First Class (70/100)</div>
-        <div class="cert-sub">University of Nottingham Malaysia · 2023</div>
-      </div>
-    </div>
-    <div class="cert-item">
-      <span class="cert-ico">🀄</span>
-      <div>
-        <div class="cert-name">HSK Level 5 Chinese Proficiency (212 / 300)</div>
-        <div class="cert-sub">Hanban / Confucius Institute HQ · 2010</div>
-      </div>
-    </div>
-    <div class="cert-item">
-      <span class="cert-ico">🛡</span>
-      <div>
-        <div class="cert-name">BC Mandatory: Fraud Awareness · Child Protection · Safeguarding · EDI · IELTS Invigilation</div>
-        <div class="cert-sub">British Council Global L&D · 2023</div>
-      </div>
-    </div>
-  </div>
-</div>
+  </section>
 
-<div class="rule"></div>
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="sec-label">Contact</p>
+    <h2>Let's <em>connect</em></h2>
+    <p class="contact-intro reveal">Currently based in Kobe, Japan — open to research collaborations, internships, and professional opportunities in international development, education policy, and digital transformation.</p>
+    <div class="contact-grid stagger reveal">
+      <a class="contact-cell" href="mailto:wylynnl@gmail.com">
+        <div class="cc-label">Email</div>
+        <div class="cc-row">
+          <span class="cc-val">wylynnl@gmail.com</span>
+          <span class="cc-arrow">↗</span>
+        </div>
+      </a>
+      <a class="contact-cell" href="tel:+819021107097">
+        <div class="cc-label">Phone (Japan)</div>
+        <div class="cc-row">
+          <span class="cc-val">+81 90 2110 7097</span>
+          <span class="cc-arrow">↗</span>
+        </div>
+      </a>
+      <a class="contact-cell" href="https://www.linkedin.com/in/wai-yan-lin-r2y4u96/" target="_blank">
+        <div class="cc-label">LinkedIn</div>
+        <div class="cc-row">
+          <span class="cc-val">wai-yan-lin-r2y4u96</span>
+          <span class="cc-arrow">↗</span>
+        </div>
+      </a>
+      <a class="contact-cell" href="https://gsics-ogawa.com/archives/student/wai-yan-lin" target="_blank">
+        <div class="cc-label">Kobe University Profile</div>
+        <div class="cc-row">
+          <span class="cc-val">GSICS · Ogawa Seminar</span>
+          <span class="cc-arrow">↗</span>
+        </div>
+      </a>
+    </div>
+    <div class="reveal">
+      <a class="btn-primary" href="mailto:wylynnl@gmail.com">
+        Send a message
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M1 6h10M7 2l4 4-4 4"/>
+        </svg>
+      </a>
+    </div>
+  </section>
 
-<!-- CONTACT -->
-<div class="wrap reveal">
-  <p class="label">08 · Connect</p>
-  <h2>Get in Touch</h2>
-  <div class="contact-row">
-    <a class="contact-link" href="mailto:wylynnl@gmail.com">✉ wylynnl@gmail.com</a>
-    <a class="contact-link" href="https://www.linkedin.com/in/wai-yan-lin-r2y4u96/" target="_blank">in LinkedIn</a>
-    <a class="contact-link" href="https://gsics-ogawa.com/archives/student/wai-yan-lin" target="_blank">🎓 Kobe University</a>
-    <span class="contact-link">📍 Kobe, Japan</span>
-  </div>
-</div>
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-name">Wai Yan Lin</span>
+    <span class="footer-copy">© 2025 · Kobe University GSICS · Japan</span>
+  </footer>
 
-<footer>
-  © 2025 Wai Yan Lin &nbsp;·&nbsp; Kobe University GSICS · Japan &nbsp;·&nbsp; Built with intention
-</footer>
+</main>
 
 <script>
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+// ── SIDEBAR TOGGLE (mobile) ──────────────────────────
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+}
+function closeMobileNav(){
+  document.getElementById('mobileNav').classList.remove('open');
+}
 
-  const skillObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.skill-fill').forEach(bar => {
-          bar.style.width = bar.dataset.w + '%';
-        });
-      }
-    });
-  }, { threshold: 0.3 });
-  document.querySelectorAll('.skills-visual').forEach(el => skillObs.observe(el));
+// ── ACTIVE NAV ON SCROLL ─────────────────────────────
+const sections = document.querySelectorAll('section[id], div[id="home"]');
+const navLinks = document.querySelectorAll('nav a[href^="#"]');
 
-  const red = '#c0392b';
-  const redSoft = '#e05c4e';
-  const gridColor = 'rgba(255,255,255,0.07)';
-  const labelColor = '#888';
-
-  new Chart(document.getElementById('barChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Partnerships Mgr', 'Liaison Officer', 'Interpreter', 'World Bank', 'Kobe Univ'],
-      datasets: [{
-        label: 'Years',
-        data: [3.1, 3.8, 4, 0.2, 2],
-        backgroundColor: [red, red, 'rgba(192,57,43,0.4)', '#e05c4e', 'rgba(192,57,43,0.4)'],
-        borderColor: [red, red, redSoft, redSoft, redSoft],
-        borderWidth: 1,
-        borderRadius: 3,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { ticks: { color: labelColor, font: { size: 10 }, maxRotation: 30, autoSkip: false }, grid: { color: gridColor } },
-        y: { ticks: { color: labelColor, font: { size: 11 } }, grid: { color: gridColor }, beginAtZero: true }
-      }
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      navLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active) active.classList.add('active');
     }
   });
+}, {threshold:0.35});
 
-  new Chart(document.getElementById('radarChart'), {
-    type: 'radar',
-    data: {
-      labels: ['Partnerships', 'Research', 'Languages', 'Analytics', 'Communication', 'Policy'],
-      datasets: [{
-        data: [95, 82, 92, 75, 91, 80],
-        backgroundColor: 'rgba(192,57,43,0.18)',
-        borderColor: red,
-        borderWidth: 1.5,
-        pointBackgroundColor: red,
-        pointRadius: 3,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        r: {
-          ticks: { display: false },
-          grid: { color: gridColor },
-          angleLines: { color: gridColor },
-          pointLabels: { color: labelColor, font: { size: 10 } },
-          min: 0, max: 100
-        }
-      }
+document.querySelectorAll('section[id]').forEach(s => io.observe(s));
+
+// ── REVEAL ON SCROLL ─────────────────────────────────
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('in');
     }
   });
+}, {threshold:0.06, rootMargin:'0px 0px -40px 0px'});
 
-  new Chart(document.getElementById('donutChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['UK', 'ASEAN', 'USA', 'Japan'],
-      datasets: [{
-        data: [4, 3, 2, 1],
-        backgroundColor: ['#c0392b', '#e05c4e', 'rgba(192,57,43,0.5)', 'rgba(192,57,43,0.25)'],
-        borderColor: '#1a1a1a',
-        borderWidth: 2,
-        hoverOffset: 6
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '62%',
-      plugins: { legend: { display: false } }
+document.querySelectorAll('.reveal, .stagger').forEach(el => revealObs.observe(el));
+
+// ── SKILL BAR ANIMATION ──────────────────────────────
+const skillObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-fill').forEach(bar => {
+        bar.style.width = bar.dataset.w + '%';
+      });
     }
   });
+}, {threshold:0.3});
+
+document.querySelectorAll('#skillGrid').forEach(el => skillObs.observe(el));
+
+// ── HERO IS VISIBLE BY DEFAULT ────────────────────────
+document.querySelector('.hero').style.opacity = '1';
+document.querySelector('.hero').style.transform = 'none';
 </script>
 </body>
 </html>
